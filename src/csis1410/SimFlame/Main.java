@@ -10,7 +10,7 @@ public class Main {
    
    /**
     * The main method.
-    * Instantiates the Simulation and Window.
+    * Instantiates the World, Simulation and Window.
     * 
     * @param args command line arguments
     */

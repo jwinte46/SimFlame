@@ -5,22 +5,43 @@ package csis1410.SimFlame;
  */
 public class Point {
    
+   // Fields
+   
+   private int x;
+   private int y;
+   
    // Methods
    
+   /**
+    * Gets the x coordinate
+    * @return the x coordinate
+    */
    public int getX() {
-      // TODO: Write me
+      return x;
    }
    
+   /**
+    * Gets the y coordinate
+    * @return the y coordinate
+    */
    public int getY() {
-      // TODO: Write me
+      return y;
    }
    
+   /**
+    * Sets the y coordinate to the specified number
+    * @param x the number to set it to
+    */
    public void setX(int x) {
-      // TODO: Write me
+      this.x = x;
    }
    
+   /**
+    * Sets the y coordinate to the specified number
+    * @param y the number to set it to
+    */
    public void setY(int y) {
-      // TODO: Write me
+      this.y = y;
    }
    
 }

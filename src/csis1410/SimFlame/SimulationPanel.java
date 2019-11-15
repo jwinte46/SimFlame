@@ -13,7 +13,9 @@ import javax.swing.JPanel;
  */
 public class SimulationPanel extends JPanel implements MouseListener {
    
-   // Private classes
+   // Fields
+   
+   // Private Classes
    
    /**
     * The callback that tells the panel to redraw itself
@@ -30,8 +32,6 @@ public class SimulationPanel extends JPanel implements MouseListener {
       }
       
    }
-   
-   // Fields
    
    // Constructors
    
