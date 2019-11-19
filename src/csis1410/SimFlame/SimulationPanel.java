@@ -12,7 +12,8 @@ import javax.swing.JPanel;
  *
  */
 public class SimulationPanel extends JPanel implements MouseListener {
-   
+   private World world;
+   private MouseEvent lastMouseEvent;
    // Private classes
    
    /**
@@ -49,6 +50,7 @@ public class SimulationPanel extends JPanel implements MouseListener {
     * @return a Point with the converted coordinates
     */
    public Point mouseCoordsToGridCoords(MouseEvent e) {
+	return null;
       // TODO: Write me
    }
    
