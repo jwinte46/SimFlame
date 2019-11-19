@@ -22,8 +22,9 @@ public class Window extends JFrame {
    public Window(Simulation simulation) {
       // TODO: Write me
    }
-   
+   // This is so cool
    // Methods
+   //method
    
    /**
     * Shows the Window
