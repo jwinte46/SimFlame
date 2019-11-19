@@ -10,6 +10,15 @@ import java.util.TimerTask;
  */
 public class Simulation {
    
+   // Fields
+   
+   private World world; // the world which this simulation operates on
+   // the simulation reads the data from the world's heatmap, and writes into
+   // its own secondHeatMap array. Then it swaps heatMaps with the World.
+   private double[] secondHeatMap;
+   private Timer simulationTimer; // responsible for calling the step() method at a fixed interval
+   private int simulationPeriod; // the number of milliseconds between steps
+   
    // Private Classes
    
    /**
@@ -29,15 +38,6 @@ public class Simulation {
       }
    }
    
-   // Fields
-   
-   private World world; // the world which this simulation operates on
-   // the simulation reads the data from the world's heatmap, and writes into
-   // its own secondHeatMap array. Then it swaps heatMaps with the World.
-   private double[] secondHeatMap;
-   private Timer simulationTimer; // responsible for calling the step() method at a fixed interval
-   private int simulationPeriod; // the number of milliseconds between steps
-   
    // Constructors
    
    /**
@@ -46,6 +46,7 @@ public class Simulation {
    public Simulation(World world) {
       this.world = world;
       simulationPeriod = 17; // default to stepping every 17 milliseconds
+      simulationTimer = null;
    }
    
    // Methods 
@@ -106,6 +107,15 @@ public class Simulation {
     */
    public void setSimulationPeriod(int period) {
       simulationPeriod = period;
+   }
+   
+   /**
+    * Gets the Timer the Simulation uses
+    * 
+    * @return the Timer
+    */
+   public Timer getSimulationTimer() {
+      return simulationTimer;
    }
    
 }
