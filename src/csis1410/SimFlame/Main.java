@@ -15,7 +15,9 @@ public class Main {
     * @param args command line arguments
     */
    public static void main(String[] args) {
-      // TODO: Write me
+      World world = new World(100, 100);
+      Simulation simulation = new Simulation(world);
+      Window window = new Window(simulation)
    }
    
 }

@@ -70,7 +70,8 @@ public class Simulation {
     * Resets the simulation to its initial state
     */
    public void reset() {
-      // TODO: Write me
+      simulationTimer.cancel();
+      world.resetHeat();
    }
    
    /**

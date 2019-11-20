@@ -28,11 +28,6 @@ public class WorldTest {
    }
 
    @Test
-   public void testAddFuelLine() {
-      fail("Not yet implemented");
-   }
-
-   @Test
    public void testSwapHeatMap() {
       boolean exceptionThrown = false;
       

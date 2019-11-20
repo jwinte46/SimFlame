@@ -21,19 +21,4 @@ public class SimulationTest {
       assertNotNull(testSimulation.getSimulationTimer());
       }
 
-   @Test
-   public void testStop() {
-      fail("Not yet implemented");
-   }
-
-   @Test
-   public void testReset() {
-      fail("Not yet implemented");
-   }
-
-   @Test
-   public void testStep() {
-      fail("Not yet implemented");
-   }
-
 }

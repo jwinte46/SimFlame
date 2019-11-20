@@ -77,103 +77,6 @@ public class World {
       // the next pixel moves down by 2/3 of a pixel
       // the next moves down by 3/3 of a pixel
       
-      /* OLD BROKEN VERSION
-      // the starting coordinates of the line
-      int x = start.getX();
-      int y = start.getY();
-      
-      // first the edge case of a line that is just a single pixel
-      if(x == end.getX() && y == end.getY()) {
-         fuel.add(start);
-         return;
-      }
-      
-      // if it's not just a single pixel, we need more info
-      int horizontalDirection = (end.getX() > x ? 1 : -1); // which way the line is pointing horizontally. either 1 or -1
-      int verticalDirection   = (end.getY() > y ? 1 : -1); // which way it's pointing vertically
-      int xDifference = end.getX() - start.getX();
-      int yDifference = end.getY() - start.getY();
-      
-      // First account for horizontal
-      if(start.getY() == end.getY()) { // Horizontal line
-         boolean loop = true;
-         while(loop) {
-            if(x == end.getX())
-               loop = false;
-            fuel.add(new Point(x, y));
-            x += horizontalDirection;
-         }
-         return;
-      }
-      
-      // Now account for vertical lines
-      if(start.getX() == end.getX()) {
-         boolean loop = true;
-         while(loop) {
-            if(y == end.getY())
-               loop = false;
-            fuel.add(new Point(x, y));
-            y += verticalDirection;
-         }
-         return;
-      }
-      
-      // Perfectly diagonal lines
-      if(xDifference == yDifference) {
-         boolean loop = true;
-         while(loop) {
-            if(x == end.getX()) // this means we want this to be the last iteration of the loop
-               loop = false;
-            
-            fuel.add(new Point(x, y));
-            x += horizontalDirection;
-            y += verticalDirection;
-         }
-         return;
-      }
-      
-      
-      // lines where xDifference is greater than yDifference
-      if(xDifference > yDifference) {
-         int numerator = 0;
-         boolean loop = true;
-         while(loop) {
-            if(x == end.getX())
-               loop = false;
-            
-            fuel.add(new Point(x, y));
-            x += horizontalDirection;
-            numerator += yDifference;
-            if(numerator >= xDifference) {
-               y += verticalDirection;
-               numerator -= xDifference;
-            }
-         }
-         return;
-      }
-      
-      // lines where yDifference is greater than xDifference
-      if(yDifference > xDifference) {
-         int numerator = 0;
-         boolean loop = true;
-         while(y != end.getY()) {
-            if(y == end.getY())
-               loop = false;
-            
-            fuel.add(new Point(x, y));
-            y += verticalDirection;
-            numerator += xDifference;
-            if(numerator >= xDifference) {
-               x += horizontalDirection;
-               numerator -= yDifference;
-            }
-         }
-         return;
-      }
-      */
-      
-      // new version
-      
       int deltaX = end.getX() - start.getX();
       int deltaY = end.getY() - start.getY();
       //int x = start.getX();
@@ -285,6 +188,12 @@ public class World {
       heatMap[pointToIndex(new Point(x, y))] = heat;
    }
    
+   /**
+    * Sets the heat to zero across the whole world
+    */
+   public void resetHeat() {
+      Arrays.fill(heatMap, 0);
+   }
    /**
     * Gets the heat value at the given coordinates
     * @param x the x coordinate
