@@ -1,7 +1,7 @@
 package csis1410.SimFlame;
 
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 
 /**
  * Class representing the state of the world
@@ -11,11 +11,11 @@ import java.util.Arrays;
 public class World {
    
    // Fields
-   
+   // TODO change fuel into a hashset
    private int width;
    private int height;
    private double[] heatMap; // contains the heat values for the world
-   private ArrayList<Point> fuel; // a list of coordinates which contain fuel
+   private HashSet<Point> fuel; // a list of coordinates which contain fuel
    private double coolingRate; // the rate at which flame cools
    private Callback updateCallback; // the callback that gets fired when the world is updated
    
@@ -38,11 +38,19 @@ public class World {
       this.height = height;
       heatMap = new double[width * height];
       Arrays.fill(heatMap, 0.0);
-      fuel = new ArrayList<Point>();
+      fuel = new HashSet<Point>();
       coolingRate = 0.5;
    }
    
    // Methods
+   
+   public void addFuelAt(Point p) {
+      int x = p.getX();
+      int y = p.getY();
+      if(x >= width || y >= height)
+         return; // no purpose in adding an out-of-bounds point
+      fuel.add(p);
+   }
    
    /**
     * Adds a line of fuel to the world using a line draw algorithm
@@ -69,6 +77,7 @@ public class World {
       // the next pixel moves down by 2/3 of a pixel
       // the next moves down by 3/3 of a pixel
       
+      /* OLD BROKEN VERSION
       // the starting coordinates of the line
       int x = start.getX();
       int y = start.getY();
@@ -161,6 +170,108 @@ public class World {
          }
          return;
       }
+      */
+      
+      // new version
+      
+      int deltaX = end.getX() - start.getX();
+      int deltaY = end.getY() - start.getY();
+      //int x = start.getX();
+      //int y = start.getY();
+      int xDir = (deltaX > 0 ? 1 : -1);
+      int yDir = (deltaY > 0 ? 1 : -1);
+      
+      
+      // lines where the start and end point are identical
+      if(start.equals(end)) {
+         fuel.add(start);
+         return;
+      }
+      
+      // horizontal lines
+      if(deltaX != 0 && deltaY == 0) {
+         int x = start.getX();
+         int y = start.getY();
+         boolean loop = true;
+         while(loop) {
+            if(x == end.getX())
+               loop = false;
+            fuel.add(new Point(x, y));
+            x += xDir;
+         }
+         return;
+      }
+      
+      // vertical lines
+      if(deltaX == 0 && deltaY != 0) {
+         int x = start.getX();
+         int y = start.getY();
+         boolean loop = true;
+         while(loop) {
+            if(y == end.getY())
+               loop = false;
+            fuel.add(new Point(x, y));
+            y += yDir;
+         }
+         return;
+      }
+      
+      // perfectly diagonal lines
+      if(Math.abs(deltaX) == Math.abs(deltaY)) {
+         int x = start.getX();
+         int y = start.getY();
+         boolean loop = true;
+         while(loop) {
+            if(x == end.getX() && y == end.getY())
+               loop = false;
+            fuel.add(new Point(x, y));
+            x += xDir;
+            y += yDir;
+         }
+         return;
+      }
+      
+      // line where deltaX is greater than deltaY
+      if(Math.abs(deltaX) > Math.abs(deltaY)) {
+         int x = start.getX();
+         int y = start.getY();
+         int numerator = 0;
+         boolean loop = true;
+         while(loop) {
+            if(x == end.getX())
+               loop = false;
+            fuel.add(new Point(x, y));
+            x+= xDir;
+            numerator += Math.abs(deltaY);
+            if(numerator >= Math.abs(deltaX)) {
+               numerator -= Math.abs(deltaX);
+               y += yDir;
+            }
+         }
+         return;
+      }
+      
+      // line where deltaY is less than deltaX
+      if(Math.abs(deltaX) < Math.abs(deltaY)) {
+         int x = start.getX();
+         int y = start.getY();
+         int numerator = 0;
+         boolean loop = true;
+         while(loop) {
+            if(y == end.getY())
+               loop = false;
+            fuel.add(new Point(x, y));
+            y += yDir;
+            numerator += Math.abs(deltaX);
+            if(numerator >= Math.abs(deltaY)) {
+               numerator -= Math.abs(deltaY);
+               x += xDir;
+            }
+         }
+         return;
+      }
+      
+      
    }
    
    /**
@@ -285,6 +396,13 @@ public class World {
     */
    public double[] getHeatMap() {
       return heatMap;
+   }
+   
+   /**
+    * @return
+    */
+   public HashSet<Point> getFuelList() {
+      return fuel;
    }
    
 }
