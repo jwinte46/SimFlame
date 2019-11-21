@@ -12,7 +12,7 @@ import javax.swing.JPanel;
  *
  */
 public class SimulationPanel extends JPanel implements MouseListener {
-   private World world;
+   private Simulation simulation;
    private MouseEvent lastMouseEvent;
    // Private classes
    
@@ -37,7 +37,11 @@ public class SimulationPanel extends JPanel implements MouseListener {
    
    // Constructors
    
-   public SimulationPanel(World world) {
+   /**
+    * Constructor for SimulationPanel
+    * @param simulation
+    */
+   public SimulationPanel(Simulation simulation) {
       // TODO: Write me
    }
    
