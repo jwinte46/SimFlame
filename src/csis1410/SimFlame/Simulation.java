@@ -80,9 +80,7 @@ public class Simulation {
     * Gets called repeatedly by simulationTimer. Is responsible for progressing the simulation.
     */
    public void step() {
-      // set the heat of fuel cells to 1.0
-      world.getFuelList().add(new Point(1, 1));
-      System.out.println(world.getFuelList());
+      // TODO: Write me
    }
    
    /**
