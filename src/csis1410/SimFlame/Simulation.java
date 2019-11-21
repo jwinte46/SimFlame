@@ -56,7 +56,7 @@ public class Simulation {
     */
    public void start() {
       simulationTimer = new Timer();
-      simulationTimer.schedule(new SimulationTimerTask(), simulationPeriod);
+      simulationTimer.schedule(new SimulationTimerTask(), 0, simulationPeriod);
    }
    
    /**

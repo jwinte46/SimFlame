@@ -189,6 +189,15 @@ public class World {
    }
    
    /**
+    * Sets the heat value at the given index to the array
+    * @param i the index
+    * @param heat the new heat value
+    */
+   public void setHeatAt(int i, double heat) {
+      heatMap[i] = heat;
+   }
+   
+   /**
     * Sets the heat to zero across the whole world
     */
    public void resetHeat() {
@@ -204,6 +213,14 @@ public class World {
       return heatMap[pointToIndex(new Point(x, y))];
    }
    
+   /**
+    * Gets the heat at the given index to the array
+    * @param i the index
+    * @return the heat value
+    */
+   public double getHeatAt(int i) {
+      return heatMap[i];
+   }
    /**
     * Sets the cooling rate of the world
     * @param coolingRate the new cooling rate
@@ -278,6 +295,23 @@ public class World {
     */
    public int pointToIndex(Point p) {
       return this.width * p.getY() + p.getX();
+   }
+   
+   /**
+    * converts an index of the array into a two dimensional point
+    * 
+    * @param i the index
+    * @return the point
+    */
+   public Point indexToPoint(int i) {
+      /****
+       *012
+       *345
+       *678
+       */
+      // y = i / width
+      // x = i % width
+      return new Point(i % width, i / width);
    }
    
    /**

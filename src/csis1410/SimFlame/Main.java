@@ -18,6 +18,7 @@ public class Main {
       World world = new World(100, 100);
       Simulation simulation = new Simulation(world);
       Window window = new Window(simulation);
+      window.setVisible(true);
    }
    
 }
