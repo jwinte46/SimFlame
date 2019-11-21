@@ -29,12 +29,11 @@ public class TestPanel extends JPanel implements MouseListener, MouseMotionListe
     * @param width the number of cells horizontally
     * @param height the number of cells vertically
     */
-   public TestPanel(int width, int height, int cellSize) {
-      this.width = width;
-      this.height = height;
+   public TestPanel(World world, int cellSize) {
+      this.width = world.getWidth();
+      this.height = world.getHeight();
       this.cellSize = cellSize;
       setPreferredSize(new Dimension(width * cellSize, height * cellSize));
-      world = new World(50, 50);
       
    }
 
@@ -56,10 +55,18 @@ public class TestPanel extends JPanel implements MouseListener, MouseMotionListe
       
       // heat
       for(int i = 0; i < world.getWidth() * world.getHeight(); i++) {
-         double heat = world.getHeatAt(i);
-         Color heatColor = new Color(heat, 0, 0); // try this. it's not gonna look good.
+         world.setHeatAt(i, 1.0);
+         g.setColor(new Color((float)(world.getHeatAt(i)), 0.0f, 0.0f));
+         Point drawPoint = world.indexToPoint(i);
+         if(i % 2 == 0)
+            g.fillRect(drawPoint.getX() * cellSize, drawPoint.getY() * cellSize, cellSize, cellSize);
+         
+         /*Color heatColor = new Color((float)heat, 0, 0); // try this. it's not gonna look good.
          g.setColor(heatColor);
-         g.fillRect()
+         Point drawPoint = world.indexToPoint(i);
+         int drawX = drawPoint.getX() * cellSize;
+         int drawY = drawPoint.getY() * cellSize;
+         g.fillRect(drawX, drawY, cellSize, cellSize);*/
       }
       
       // grid lines

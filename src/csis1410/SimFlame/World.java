@@ -297,7 +297,22 @@ public class World {
       return this.width * p.getY() + p.getX();
    }
    
-   public Point indexToPoint
+   /**
+    * converts an index of the array into a two dimensional point
+    * 
+    * @param i the index
+    * @return the point
+    */
+   public Point indexToPoint(int i) {
+      /****
+       *012
+       *345
+       *678
+       */
+      // y = i / width
+      // x = i % width
+      return new Point(i % width, i / width);
+   }
    
    /**
     * Gets the width of the world

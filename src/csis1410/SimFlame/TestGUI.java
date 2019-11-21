@@ -35,7 +35,7 @@ public class TestGUI extends JFrame {
       contentPane.setLayout(new BorderLayout(0, 0));
       setContentPane(contentPane);
       
-      TestPanel testPanel = new TestPanel(80, 80, 10);
+      TestPanel testPanel = new TestPanel(simulation.getWorld(), 10);
       contentPane.add(testPanel, BorderLayout.WEST);
       addMouseListener((MouseListener)testPanel);
       addMouseMotionListener((MouseMotionListener)testPanel);
