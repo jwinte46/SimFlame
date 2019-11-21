@@ -14,27 +14,13 @@ public class W_FileToSave extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField txtWhichFileDo;
+	private JTextField textField;
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					W_FileToSave frame = new W_FileToSave();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 
 	/**
 	 * Create the frame.
 	 */
-	public W_FileToSave() {
+	public W_FileToSave(Simulation simulation) {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
@@ -53,6 +39,13 @@ public class W_FileToSave extends JFrame {
 		
 		JButton btnNewButton = new JButton("Save");
 		panel.add(btnNewButton);
+		
+		JPanel panel_1 = new JPanel();
+		contentPane.add(panel_1, BorderLayout.CENTER);
+		
+		textField = new JTextField();
+		panel_1.add(textField);
+		textField.setColumns(10);
 	}
 
 }
