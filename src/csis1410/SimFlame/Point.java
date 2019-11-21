@@ -3,7 +3,7 @@ package csis1410.SimFlame;
 /**
  * Represents coordinates in 2D space
  */
-public class Point implements Comparable {
+public class Point {
    
    // Fields
    

@@ -32,6 +32,7 @@ public class Window extends JFrame {
     * @param simulation reference to the simulation
     */
    public Window(Simulation simulation) {
+      setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
    	
    	JPanel simulationPanel = new JPanel();
    	getContentPane().add(simulationPanel, BorderLayout.EAST);
@@ -43,6 +44,7 @@ public class Window extends JFrame {
    			simulation.start();
    		}
    	});
+   	simulationPanel.setLayout(new MigLayout("", "[70px][67px][75px][69px][68px]", "[25px]"));
    	simulationPanel.add(btnStartSimulation, "cell 0 0,alignx left,aligny top");
    	
    	JButton btnStopSimulation = new JButton("Stop");
@@ -51,37 +53,28 @@ public class Window extends JFrame {
    			simulation.stop();
    		}
    	});
-   	simulationPanel.add(btnStopSimulation, "cell 0 1,alignx left,aligny top");
+   	simulationPanel.add(btnStopSimulation, "cell 1 0,alignx left,aligny top");
    	
    	JButton btnResetSimulation = new JButton("Reset");
-   	simulationPanel.add(btnResetSimulation, "cell 0 2,alignx left,aligny top");
+   	simulationPanel.add(btnResetSimulation, "cell 2 0,alignx left,aligny top");
    	
    	JButton btnLoadSimulation = new JButton("Load");
    	btnLoadSimulation.addActionListener(new ActionListener() {
    		public void actionPerformed(ActionEvent e) {
    			W_FileToLoad loadWindow = new W_FileToLoad(simulation);
-   			loadWindow.show();
+   			loadWindow.setVisible(true);
    		}
    	});
-   	simulationPanel.add(btnLoadSimulation, "cell 0 3");
+   	simulationPanel.add(btnLoadSimulation, "cell 3 0,alignx left,aligny top");
    	
    	JButton btnSaveSimulation = new JButton("Save");
    	btnSaveSimulation.addActionListener(new ActionListener() {
    		public void actionPerformed(ActionEvent e) {
    			W_FileToSave saveWindow = new W_FileToSave(simulation);
-   			saveWindow.show();
+   			saveWindow.setVisible(true);
    		}
    	});
-   	simulationPanel.add(btnSaveSimulation, "cell 0 4");
-      // TODO: Write me
-   }
-  
-   
-   /**
-    * Shows the Window
-    */
-   public void show() {
-      // TODO: Write me
+   	simulationPanel.add(btnSaveSimulation, "cell 4 0,alignx left,aligny top");
    }
    
 }
