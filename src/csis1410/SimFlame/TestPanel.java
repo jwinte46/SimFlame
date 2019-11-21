@@ -21,6 +21,7 @@ public class TestPanel extends JPanel implements MouseListener, MouseMotionListe
                                        * keep a reference to the previous mouse event.
                                        * That way, we can draw a line between the previous 
                                        * and current mouse coordinates */
+   private boolean drawGridLines; // whether or not to draw grid lines
    
    /**
     * Create the panel.
@@ -35,8 +36,6 @@ public class TestPanel extends JPanel implements MouseListener, MouseMotionListe
       setPreferredSize(new Dimension(width * cellSize, height * cellSize));
       world = new World(50, 50);
       
-      // test
-      world.addFuelLine(new Point(0, 10), new Point(0, 0));
    }
 
    @Override
@@ -44,7 +43,7 @@ public class TestPanel extends JPanel implements MouseListener, MouseMotionListe
       super.paintComponent(g);
       // background
       g.setColor(Color.BLACK);
-      g.fillRect(0, 0, 500, 500);
+      g.fillRect(0, 0, width * cellSize, height * cellSize);
       
       // draw fuel cells
       g.setColor(Color.ORANGE);
@@ -55,16 +54,30 @@ public class TestPanel extends JPanel implements MouseListener, MouseMotionListe
          g.fillRect(x, y, cellSize, cellSize);
       }
       
+      // heat
+      for(int i = 0; i < world.getWidth() * world.getHeight(); i++) {
+         double heat = world.getHeatAt(i);
+         Color heatColor = new Color(heat, 0, 0); // try this. it's not gonna look good.
+         g.setColor(heatColor);
+         g.fillRect()
+      }
+      
       // grid lines
-      g.setColor(Color.white);
-      for(int i = 0; i < width; i++) {
-         g.drawLine(i * cellSize, 0, i * cellSize, height * cellSize);
-         for(int j = 0; j < height; j++) {
-            g.drawLine(0, j * cellSize, width * cellSize, j * cellSize);
+      if(drawGridLines) {
+         g.setColor(Color.white);
+         for(int i = 0; i < width; i++) {
+            g.drawLine(i * cellSize, 0, i * cellSize, height * cellSize);
+            for(int j = 0; j < height; j++) {
+               g.drawLine(0, j * cellSize, width * cellSize, j * cellSize);
+            }
          }
       }
    }
 
+   public void setDrawGridLines(boolean b) {
+      drawGridLines = b;
+   }
+   
    private Point panelCoordsToWorldCoords(Point p) {
       return null;
    }

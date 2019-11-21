@@ -56,7 +56,7 @@ public class Simulation {
     */
    public void start() {
       simulationTimer = new Timer();
-      simulationTimer.schedule(new SimulationTimerTask(), simulationPeriod);
+      simulationTimer.schedule(new SimulationTimerTask(), 0, simulationPeriod);
    }
    
    /**
@@ -80,7 +80,7 @@ public class Simulation {
     * Gets called repeatedly by simulationTimer. Is responsible for progressing the simulation.
     */
    public void step() {
-      // TODO: Write me
+      
    }
    
    /**
