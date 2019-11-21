@@ -33,65 +33,54 @@ public class Window extends JFrame {
     */
    public Window(Simulation simulation) {
    	
-   	JPanel panel = new JPanel();
-   	getContentPane().add(panel, BorderLayout.EAST);
-   	panel.setLayout(new MigLayout("", "[117px]", "[29px][29px][29px][][]"));
+   	JPanel simulationPanel = new JPanel();
+   	getContentPane().add(simulationPanel, BorderLayout.EAST);
+   	simulationPanel.setLayout(new MigLayout("", "[117px]", "[29px][29px][29px][][]"));
    	
    	JButton btnStartSimulation = new JButton("Start");
-   	panel.add(btnStartSimulation, "cell 0 0,alignx left,aligny top");
+   	btnStartSimulation.addActionListener(new ActionListener() {
+   		public void actionPerformed(ActionEvent e) {
+   			simulation.start();
+   		}
+   	});
+   	simulationPanel.add(btnStartSimulation, "cell 0 0,alignx left,aligny top");
    	
    	JButton btnStopSimulation = new JButton("Stop");
-   	panel.add(btnStopSimulation, "cell 0 1,alignx left,aligny top");
+   	btnStopSimulation.addActionListener(new ActionListener() {
+   		public void actionPerformed(ActionEvent e) {
+   			simulation.stop();
+   		}
+   	});
+   	simulationPanel.add(btnStopSimulation, "cell 0 1,alignx left,aligny top");
    	
    	JButton btnResetSimulation = new JButton("Reset");
-   	panel.add(btnResetSimulation, "cell 0 2,alignx left,aligny top");
+   	simulationPanel.add(btnResetSimulation, "cell 0 2,alignx left,aligny top");
    	
    	JButton btnLoadSimulation = new JButton("Load");
    	btnLoadSimulation.addActionListener(new ActionListener() {
    		public void actionPerformed(ActionEvent e) {
-   			
+   			W_FileToLoad loadWindow = new W_FileToLoad(simulation);
+   			loadWindow.show();
    		}
    	});
-   	panel.add(btnLoadSimulation, "cell 0 3");
+   	simulationPanel.add(btnLoadSimulation, "cell 0 3");
    	
    	JButton btnSaveSimulation = new JButton("Save");
    	btnSaveSimulation.addActionListener(new ActionListener() {
    		public void actionPerformed(ActionEvent e) {
+   			W_FileToSave saveWindow = new W_FileToSave(simulation);
+   			saveWindow.show();
    		}
    	});
-   	panel.add(btnSaveSimulation, "cell 0 4");
+   	simulationPanel.add(btnSaveSimulation, "cell 0 4");
       // TODO: Write me
    }
-   // This is so cool
-   // 
-   // Method
-   //method
+  
    
    /**
     * Shows the Window
     */
    public void show() {
-      // TODO: Write me
-   }
-   
-   /**
-    * Starts the simulation
-    */
-   private void startSimulation() {
-      // TODO: Write me
-   }
-   
-   /**
-    * Stops the simulation
-    */
-   private void stopSimulation() {
-      // TODO: Write me
-   }
-   
-   /**
-    * Resets the simulation 
-    */
-   private void resetSimulation() {
       // TODO: Write me
    }
    

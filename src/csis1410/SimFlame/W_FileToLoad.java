@@ -12,32 +12,18 @@ import javax.swing.SwingConstants;
 import javax.swing.JButton;
 import java.awt.Color;
 import javax.swing.JTextArea;
+import javax.swing.JFormattedTextField;
 
 public class W_FileToLoad extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField txtWhichFileDo;
-
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					W_FileToLoad frame = new W_FileToLoad();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+	private JTextField textField;
 
 	/**
 	 * Create the frame.
 	 */
-	public W_FileToLoad() {
+	public W_FileToLoad(Simulation simulation) {//Capitalized: Name of a type. Uncapitalized: Name of the variable
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
@@ -56,6 +42,13 @@ public class W_FileToLoad extends JFrame {
 		
 		JButton btnNewButton = new JButton("Load");
 		panel.add(btnNewButton);
+		
+		JPanel panel_1 = new JPanel();
+		contentPane.add(panel_1, BorderLayout.CENTER);
+		
+		textField = new JTextField();
+		panel_1.add(textField);
+		textField.setColumns(10);
 	}
 
 }
