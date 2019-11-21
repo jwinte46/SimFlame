@@ -10,6 +10,8 @@ import javax.swing.JTextField;
 import javax.swing.JButton;
 import javax.swing.SwingConstants;
 import javax.swing.JLabel;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class W_FileToSave extends JFrame {
 
@@ -22,7 +24,7 @@ public class W_FileToSave extends JFrame {
 	 * Create the frame.
 	 */
 	public W_FileToSave(Simulation simulation) {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 442, 83);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -38,6 +40,12 @@ public class W_FileToSave extends JFrame {
 		contentPane.add(panel, BorderLayout.EAST);
 		
 		JButton btnNewButton = new JButton("Save");
+		btnNewButton.addActionListener(new ActionListener() {
+		   public void actionPerformed(ActionEvent arg0) {
+		      Serializer.save(simulation.getWorld(), textField.getText());
+		      
+		   }
+		});
 		panel.add(btnNewButton);
 		
 		JPanel panel_1 = new JPanel();

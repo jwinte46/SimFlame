@@ -12,6 +12,7 @@ import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import net.miginfocom.swing.MigLayout;
+import java.awt.Dimension;
 
 /**
  * The main window of the program.
@@ -32,6 +33,8 @@ public class Window extends JFrame {
     * @param simulation reference to the simulation
     */
    public Window(Simulation simulation) {
+      setSize(new Dimension(420, 278));
+      setPreferredSize(new Dimension(200, 200));
       setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
    	
    	JPanel simulationPanel = new JPanel();
