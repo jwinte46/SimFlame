@@ -48,7 +48,7 @@ public class W_FileToLoad extends JFrame {
 		btnNewButton.addActionListener(new ActionListener() {
 		   public void actionPerformed(ActionEvent arg0) {
 		      World world = null;
-		      //Serializer.load(textField.getText());
+		      world = Serializer.load(textField.getText());
 		      if(world == null) {
 		         JOptionPane.showMessageDialog(referenceToThisFrame, "Not a path to a compatible file!", "Error", JOptionPane.WARNING_MESSAGE);
 		      } else {
