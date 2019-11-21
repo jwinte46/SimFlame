@@ -13,6 +13,8 @@ import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import net.miginfocom.swing.MigLayout;
 import java.awt.Dimension;
+import javax.swing.UIManager;
+import javax.swing.border.EmptyBorder;
 
 /**
  * The main window of the program.
@@ -24,7 +26,6 @@ public class Window extends JFrame {
    
    // Fields
 	private Simulation simulation;
-   private SimulationPanel simulationPanel;
    
    // Constructors
    
@@ -34,51 +35,59 @@ public class Window extends JFrame {
     * @param simulation reference to the simulation
     */
    public Window(Simulation simulation) {
-      setSize(new Dimension(420, 278));
-      setPreferredSize(new Dimension(200, 200));
       setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
    	
    	JPanel controlPanel = new JPanel();
+   	controlPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
    	getContentPane().add(controlPanel, BorderLayout.EAST);
-   	controlPanel.setLayout(new MigLayout("", "[117px]", "[29px][29px][29px][][]"));
    	
    	JButton btnStartSimulation = new JButton("Start");
+   	btnStartSimulation.setBounds(6, 6, 70, 25);
    	btnStartSimulation.addActionListener(new ActionListener() {
    		public void actionPerformed(ActionEvent e) {
    			simulation.start();
    		}
    	});
-   	controlPanel.setLayout(new MigLayout("", "[70px][67px][75px][69px][68px]", "[25px]"));
-   	controlPanel.add(btnStartSimulation, "cell 0 0,alignx left,aligny top");
+   	controlPanel.setLayout(null);
+   	controlPanel.setLayout(new GridLayout(0, 1, 0, 10));
+   	controlPanel.add(btnStartSimulation);
    	
    	JButton btnStopSimulation = new JButton("Stop");
+   	btnStopSimulation.setBounds(82, 6, 67, 25);
    	btnStopSimulation.addActionListener(new ActionListener() {
    		public void actionPerformed(ActionEvent e) {
    			simulation.stop();
    		}
    	});
-   	controlPanel.add(btnStopSimulation, "cell 1 0,alignx left,aligny top");
+   	controlPanel.add(btnStopSimulation);
    	
    	JButton btnResetSimulation = new JButton("Reset");
-   	controlPanel.add(btnResetSimulation, "cell 2 0,alignx left,aligny top");
+   	btnResetSimulation.setBounds(155, 6, 75, 25);
+   	controlPanel.add(btnResetSimulation);
    	
    	JButton btnLoadSimulation = new JButton("Load");
+   	btnLoadSimulation.setBounds(236, 6, 69, 25);
    	btnLoadSimulation.addActionListener(new ActionListener() {
    		public void actionPerformed(ActionEvent e) {
    			W_FileToLoad loadWindow = new W_FileToLoad(simulation);
    			loadWindow.setVisible(true);
    		}
    	});
-   	controlPanel.add(btnLoadSimulation, "cell 3 0,alignx left,aligny top");
+   	controlPanel.add(btnLoadSimulation);
    	
    	JButton btnSaveSimulation = new JButton("Save");
+   	btnSaveSimulation.setBounds(311, 6, 68, 25);
    	btnSaveSimulation.addActionListener(new ActionListener() {
    		public void actionPerformed(ActionEvent e) {
    			W_FileToSave saveWindow = new W_FileToSave(simulation);
    			saveWindow.setVisible(true);
    		}
    	});
-   	controlPanel.add(btnSaveSimulation, "cell 4 0,alignx left,aligny top");
+   	controlPanel.add(btnSaveSimulation);
+   	
+   	SimulationPanel simulationPanel = new SimulationPanel(simulation.getWorld());
+   	getContentPane().add(simulationPanel, BorderLayout.WEST);
+   	pack(); // makes the frame the appropriate size to accommodate the panel
    }
    
 }
