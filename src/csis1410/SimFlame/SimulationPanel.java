@@ -12,8 +12,11 @@ import javax.swing.JPanel;
  *
  */
 public class SimulationPanel extends JPanel implements MouseListener {
-   
+   private World world;
+   private MouseEvent lastMouseEvent;
    // Private classes
+   
+   // Private Classes
    
    /**
     * The callback that tells the panel to redraw itself
@@ -27,11 +30,10 @@ public class SimulationPanel extends JPanel implements MouseListener {
        */
       public void fire() {
          // TODO: Write me
+    	 // some changes
       }
       
    }
-   
-   // Fields
    
    // Constructors
    
@@ -48,6 +50,7 @@ public class SimulationPanel extends JPanel implements MouseListener {
     * @return a Point with the converted coordinates
     */
    public Point mouseCoordsToGridCoords(MouseEvent e) {
+	return null;
       // TODO: Write me
    }
    
