@@ -52,6 +52,16 @@ public class World {
       if(x >= width || y >= height)
          return; // no purpose in adding an out-of-bounds point
       fuel.add(p);
+      updateCallback.fire();
+   }
+   
+   public void removeFuelAt(Point p) {
+      int x = p.getX();
+      int y = p.getY();
+      if(x >= width || y >= height)
+         return;
+      fuel.remove(p);
+      updateCallback.fire();
    }
    
    /**
@@ -179,6 +189,108 @@ public class World {
       updateCallback.fire();
    }
    
+   public void removeFuelLine(Point start, Point end) {
+      
+      int deltaX = end.getX() - start.getX();
+      int deltaY = end.getY() - start.getY();
+      //int x = start.getX();
+      //int y = start.getY();
+      int xDir = (deltaX > 0 ? 1 : -1);
+      int yDir = (deltaY > 0 ? 1 : -1);
+      
+      
+      // lines where the start and end point are identical
+      if(start.equals(end)) {
+         fuel.remove(start);
+         return;
+      }
+      
+      // horizontal lines
+      if(deltaX != 0 && deltaY == 0) {
+         int x = start.getX();
+         int y = start.getY();
+         boolean loop = true;
+         while(loop) {
+            if(x == end.getX())
+               loop = false;
+            fuel.remove(new Point(x, y));
+            x += xDir;
+         }
+         return;
+      }
+      
+      // vertical lines
+      if(deltaX == 0 && deltaY != 0) {
+         int x = start.getX();
+         int y = start.getY();
+         boolean loop = true;
+         while(loop) {
+            if(y == end.getY())
+               loop = false;
+            fuel.remove(new Point(x, y));
+            y += yDir;
+         }
+         return;
+      }
+      
+      // perfectly diagonal lines
+      if(Math.abs(deltaX) == Math.abs(deltaY)) {
+         int x = start.getX();
+         int y = start.getY();
+         boolean loop = true;
+         while(loop) {
+            if(x == end.getX() && y == end.getY())
+               loop = false;
+            fuel.remove(new Point(x, y));
+            x += xDir;
+            y += yDir;
+         }
+         return;
+      }
+      
+      // line where deltaX is greater than deltaY
+      if(Math.abs(deltaX) > Math.abs(deltaY)) {
+         int x = start.getX();
+         int y = start.getY();
+         int numerator = 0;
+         boolean loop = true;
+         while(loop) {
+            if(x == end.getX())
+               loop = false;
+            fuel.remove(new Point(x, y));
+            x+= xDir;
+            numerator += Math.abs(deltaY);
+            if(numerator >= Math.abs(deltaX)) {
+               numerator -= Math.abs(deltaX);
+               y += yDir;
+            }
+         }
+         return;
+      }
+      
+      // line where deltaY is less than deltaX
+      if(Math.abs(deltaX) < Math.abs(deltaY)) {
+         int x = start.getX();
+         int y = start.getY();
+         int numerator = 0;
+         boolean loop = true;
+         while(loop) {
+            if(y == end.getY())
+               loop = false;
+            fuel.remove(new Point(x, y));
+            y += yDir;
+            numerator += Math.abs(deltaX);
+            if(numerator >= Math.abs(deltaY)) {
+               numerator -= Math.abs(deltaY);
+               x += xDir;
+            }
+         }
+         return;
+      }
+      
+      updateCallback.fire();
+   }
+   
    /**
     * Sets the heat value at the given coordinates
     * 
@@ -204,6 +316,7 @@ public class World {
     */
    public void resetHeat() {
       Arrays.fill(heatMap, 0);
+      updateCallback.fire();
    }
    /**
     * Gets the heat value at the given coordinates
@@ -249,6 +362,15 @@ public class World {
    
    public Callback getUpdateCallback() {
       return updateCallback;
+   }
+   
+   /**
+    * Removes all fuel and sets all heat to 0
+    */
+   public void clear() {
+      fuel.clear();
+      Arrays.fill(heatMap, 0.0);
+      updateCallback.fire();
    }
    
    /**

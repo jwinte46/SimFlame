@@ -27,6 +27,7 @@ public class SimulationPanel extends JPanel implements MouseListener, MouseMotio
    private Color gridColor = Color.WHITE;
    private Color fuelColor = Color.ORANGE;
    private boolean gridVisible = false;
+   private int buttonDown = 0; // 0 = none, 1 = left mouse, 2 = middle mouse, 3 = right mouse
    
    // Private Classes
    
@@ -149,19 +150,33 @@ public class SimulationPanel extends JPanel implements MouseListener, MouseMotio
    public void mousePressed(MouseEvent e) {
       // we need to initialize the lastMouseEvent variable
       lastMouseEvent = e;
-      simulation.getWorld().addFuelAt(mouseCoordsToGridCoords(e)); // add fuel where the mouse is
-      repaint();
+      int button = e.getButton();
+      buttonDown = button;
+      if(button == 1) // left button
+         simulation.getWorld().addFuelAt(mouseCoordsToGridCoords(e)); // add fuel where the mouse is
+      if(button == 3) // right button
+         simulation.getWorld().removeFuelAt(mouseCoordsToGridCoords(e));
    }
    
    @Override
    public void mouseReleased(MouseEvent e) {
-      // TODO: Write me
+      buttonDown = 0;
    }
 
    @Override
    public void mouseDragged(MouseEvent e) {
-      simulation.getWorld().addFuelLine(mouseCoordsToGridCoords(lastMouseEvent),
-                                      mouseCoordsToGridCoords(e));
+      /* I can't do what I did in mousePressed, because for some reason the 
+       * getButton() method of MouseEvent returns 0 in the mouseDragged method.
+       * So instead, I need to keep track of it myself using the mousePressed and
+       * mouseReleased methods. buttonDown is an instance variable containing a number
+       * corresponding to which mouse button is currently down.
+        */
+      if(buttonDown == 1) // left button
+         simulation.getWorld().addFuelLine(mouseCoordsToGridCoords(lastMouseEvent),
+                                           mouseCoordsToGridCoords(e));
+      if(buttonDown == 3) // right button
+         simulation.getWorld().removeFuelLine(mouseCoordsToGridCoords(lastMouseEvent),
+                                              mouseCoordsToGridCoords(e));
       lastMouseEvent = e;
       repaint();
    }

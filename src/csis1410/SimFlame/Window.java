@@ -16,6 +16,8 @@ import java.awt.Dimension;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JCheckBox;
+import javax.swing.JLabel;
+import javax.swing.SwingConstants;
 
 /**
  * The main window of the program.
@@ -47,12 +49,22 @@ public class Window extends JFrame {
       getContentPane().add(simulationPanel, BorderLayout.WEST);
       addMouseListener(simulationPanel);
       addMouseMotionListener(simulationPanel);
+      
+      JButton btnClear = new JButton("Clear");
+      btnClear.addActionListener(new ActionListener() {
+         public void actionPerformed(ActionEvent e) {
+            // clear button
+            simulation.getWorld().clear();
+         }
+      });
+      controlPanel.add(btnClear);
    	
    	JButton btnStartSimulation = new JButton("Start");
    	btnStartSimulation.setBounds(6, 6, 70, 25);
    	btnStartSimulation.addActionListener(new ActionListener() {
    		public void actionPerformed(ActionEvent e) {
    			simulation.start();
+   			btnClear.setEnabled(false);
    		}
    	});
    	controlPanel.setLayout(null);
@@ -64,6 +76,7 @@ public class Window extends JFrame {
    	btnStopSimulation.addActionListener(new ActionListener() {
    		public void actionPerformed(ActionEvent e) {
    			simulation.stop();
+   			btnClear.setEnabled(true);
    		}
    	});
    	controlPanel.add(btnStopSimulation);
@@ -80,6 +93,7 @@ public class Window extends JFrame {
    			loadWindow.setVisible(true);
    		}
    	});
+   	
    	controlPanel.add(btnLoadSimulation);
    	
    	JButton btnSaveSimulation = new JButton("Save");
@@ -100,6 +114,10 @@ public class Window extends JFrame {
    	   }
    	});
    	controlPanel.add(chckbxGrid);
+   	
+   	JLabel lblLeftClickTo = new JLabel("Left click to add fuel. Right click to remove fuel");
+   	lblLeftClickTo.setHorizontalAlignment(SwingConstants.CENTER);
+   	getContentPane().add(lblLeftClickTo, BorderLayout.NORTH);
    	
    	pack(); // makes the frame the appropriate size to accommodate the panel
    }
