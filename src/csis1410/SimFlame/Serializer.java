@@ -28,11 +28,7 @@ public class Serializer {
 	 */
 	public static void save(World world, String filename) {
 		try (PrintWriter writer = new PrintWriter(new FileOutputStream(new File(filename)))) {
-			HashSet<Point> fuelList = world.getFuelList();
-
-			for(Point el : fuelList) {
-				writer.println(el);
-			}
+			writer.print(serialize(world));
 		}catch(FileNotFoundException e) {
 			System.out.println("File cannot be found.");
 		}
@@ -67,15 +63,28 @@ public class Serializer {
 	 * @param world the world to serialize
 	 * @return the serialized version as a String
 	 */
-	/*public static String serialize(World world) {
-		try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(filename))) {
-			out.writeObject();
+	public static String serialize(World world) {
+	   /* This version is wrong. The documentation specifies that it should take a world
+	    * and return a String. It doesn't say this method should output to a file
+	    */
+		/*try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(filename))) { // where is the filename argument coming from?
+			out.writeObject(); // writeObject is supposed to take a parameter
 		} catch (FileNotFoundException e) {
 			System.out.println("File not found.");
 		} catch (IOException e) {
 			System.out.println("IO Exception occurred");
-		}
-	}*/
+		}*/
+	   
+	   /* We only want to serialize the fuel, not the heat.
+	    * Let's not use the standard object serialization Java provides for us.
+	    * Instead, let's just write the coordinates manually
+	    */
+	   StringBuilder sb = new StringBuilder();
+	   for(Point el : world.getFuelSet()) { // foreach loop 
+	      sb.append(el.getX() + " " + el.getY() + "\n");
+	   }
+	   return sb.toString();
+	}
 
 	/**
 	 * Takes a String following the same specification as those

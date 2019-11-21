@@ -24,6 +24,7 @@ public class W_FileToSave extends JFrame {
 	 * Create the frame.
 	 */
 	public W_FileToSave(Simulation simulation) {
+	   JFrame referenceToThisFrame = this;
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 442, 83);
 		contentPane = new JPanel();
@@ -43,7 +44,7 @@ public class W_FileToSave extends JFrame {
 		btnNewButton.addActionListener(new ActionListener() {
 		   public void actionPerformed(ActionEvent arg0) {
 		      Serializer.save(simulation.getWorld(), textField.getText());
-		      
+		      referenceToThisFrame.dispose();
 		   }
 		});
 		panel.add(btnNewButton);
