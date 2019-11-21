@@ -1,10 +1,13 @@
 package csis1410.SimFlame;
 
+import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
 /**
  * The panel responsible for graphically drawing the simulation as well as
@@ -12,9 +15,17 @@ import javax.swing.JPanel;
  *
  */
 public class SimulationPanel extends JPanel implements MouseListener {
+   
+   // Fields
    private Simulation simulation;
-   private MouseEvent lastMouseEvent;
-   // Private classes
+   private MouseEvent lastMouseEvent = null;
+   private int cellSize = 5; // how big to draw each cell 
+   private int worldWidth; // 
+   private int worldHeight;
+   private Color backgroundColor = Color.BLACK;
+   private Color gridColor = Color.WHITE;
+   private Color fuelColor = Color.ORANGE;
+   private boolean gridVisible = false;
    
    // Private Classes
    
@@ -29,8 +40,7 @@ public class SimulationPanel extends JPanel implements MouseListener {
        * Tells the panel to redraw itself
        */
       public void fire() {
-         // TODO: Write me
-    	 // some changes
+         repaint();
       }
       
    }
@@ -39,10 +49,26 @@ public class SimulationPanel extends JPanel implements MouseListener {
    
    /**
     * Constructor for SimulationPanel
-    * @param simulation
+    * @param simulation the simulation
     */
    public SimulationPanel(Simulation simulation) {
-      // TODO: Write me
+      this.simulation = simulation;
+      this.worldWidth = simulation.getWorld().getWidth();
+      this.worldHeight = simulation.getWorld().getHeight();
+      setPreferredSize(new Dimension(worldWidth * cellSize, worldHeight * cellSize));
+   }
+   
+   /**
+    * Constructor for SimulationPanel with a user provided cell size
+    * @param simulation the simulation
+    * @param cellSize the cell size
+    */
+   public SimulationPanel(Simulation simulation, int cellSize) {
+      this.simulation = simulation;
+      this.worldWidth = simulation.getWorld().getWidth();
+      this.worldHeight = simulation.getWorld().getHeight();
+      this.cellSize = cellSize; 
+      setPreferredSize(new Dimension(worldWidth * cellSize, worldHeight * cellSize));
    }
    
    // Methods
@@ -54,13 +80,43 @@ public class SimulationPanel extends JPanel implements MouseListener {
     * @return a Point with the converted coordinates
     */
    public Point mouseCoordsToGridCoords(MouseEvent e) {
-	return null;
-      // TODO: Write me
+      // convert from window coords to panel coords
+      MouseEvent panelEvent = SwingUtilities.convertMouseEvent(getTopLevelAncestor(), e, this);
+      
+      // convert from panel coords to world coords
+      int panelX = panelEvent.getX();
+      int panelY = panelEvent.getY();
+      int convertedX = panelX / cellSize;
+      int convertedY = panelY / cellSize;
+      return new Point(convertedX, convertedY);
    }
    
    @Override
    public void paintComponent(Graphics g) {
-      // TODO: Write me
+      int backgroundWidth = worldWidth * cellSize;
+      int backgroundHeight = worldHeight * cellSize;
+      
+      // draw the background
+      g.setColor(backgroundColor);
+      g.fillRect(0, 0, backgroundWidth, backgroundHeight);
+      
+      // draw the grid
+      if(gridVisible) {
+         g.setColor(gridColor);
+         // vertical lines
+         for(int i = 0; i < worldWidth; i++) {
+            g.drawLine(i * cellSize, 0, i * cellSize, backgroundHeight);
+         }
+         // horizontal lines
+         for(int i = 0; i < worldHeight; i++) {
+            g.drawLine(0, i * cellSize, backgroundWidth, i * cellSize);
+         }
+      }
+   }
+   
+   public void setGridVisible(boolean b) {
+      gridVisible = b;
+      repaint();
    }
    
    @Override

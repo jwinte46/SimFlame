@@ -176,7 +176,7 @@ public class World {
          return;
       }
       
-      
+      updateCallback.fire();
    }
    
    /**

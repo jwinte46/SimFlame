@@ -35,6 +35,7 @@ public class Window extends JFrame {
     * @param simulation reference to the simulation
     */
    public Window(Simulation simulation) {
+      setResizable(false);
       setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
    	
    	JPanel controlPanel = new JPanel();
@@ -85,7 +86,7 @@ public class Window extends JFrame {
    	});
    	controlPanel.add(btnSaveSimulation);
    	
-   	SimulationPanel simulationPanel = new SimulationPanel(simulation.getWorld());
+   	SimulationPanel simulationPanel = new SimulationPanel(simulation);
    	getContentPane().add(simulationPanel, BorderLayout.WEST);
    	pack(); // makes the frame the appropriate size to accommodate the panel
    }
