@@ -98,7 +98,13 @@ public class Simulation {
     * @param world the world to set it to
     */
    public void setWorld(World world) {
-      this.world = world;
+      // transfer the old world's callback to the new one if it doesn't have one
+      if(world.getUpdateCallback() == null) {
+         Callback oldCallback = this.world.getUpdateCallback();
+         world.setUpdateCallback(oldCallback);
+      }
+      this.world = world;         
+      world.getUpdateCallback().fire();
    }
    /**
     * Gets the period of this Simulation in milliseconds

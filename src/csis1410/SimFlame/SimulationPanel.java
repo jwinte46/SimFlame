@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
@@ -14,7 +15,7 @@ import javax.swing.SwingUtilities;
  * translating mouse events into coordinates usable by the simulation.
  *
  */
-public class SimulationPanel extends JPanel implements MouseListener {
+public class SimulationPanel extends JPanel implements MouseListener, MouseMotionListener {
    
    // Fields
    private Simulation simulation;
@@ -56,6 +57,7 @@ public class SimulationPanel extends JPanel implements MouseListener {
       this.worldWidth = simulation.getWorld().getWidth();
       this.worldHeight = simulation.getWorld().getHeight();
       setPreferredSize(new Dimension(worldWidth * cellSize, worldHeight * cellSize));
+      simulation.getWorld().setUpdateCallback(new RedrawCallback());
    }
    
    /**
@@ -69,6 +71,7 @@ public class SimulationPanel extends JPanel implements MouseListener {
       this.worldHeight = simulation.getWorld().getHeight();
       this.cellSize = cellSize; 
       setPreferredSize(new Dimension(worldWidth * cellSize, worldHeight * cellSize));
+      simulation.getWorld().setUpdateCallback(new RedrawCallback());
    }
    
    // Methods
@@ -99,6 +102,14 @@ public class SimulationPanel extends JPanel implements MouseListener {
       // draw the background
       g.setColor(backgroundColor);
       g.fillRect(0, 0, backgroundWidth, backgroundHeight);
+      
+      // draw fuel
+      g.setColor(fuelColor);
+      for(Point el : simulation.getWorld().getFuelSet()) {
+         int x = el.getX() * cellSize;
+         int y = el.getY() * cellSize;
+         g.fillRect(x, y, cellSize, cellSize);
+      }
       
       // draw the grid
       if(gridVisible) {
@@ -136,11 +147,28 @@ public class SimulationPanel extends JPanel implements MouseListener {
    
    @Override
    public void mousePressed(MouseEvent e) {
-      // TODO: Write me
+      // we need to initialize the lastMouseEvent variable
+      lastMouseEvent = e;
+      simulation.getWorld().addFuelAt(mouseCoordsToGridCoords(e)); // add fuel where the mouse is
+      repaint();
    }
    
    @Override
    public void mouseReleased(MouseEvent e) {
       // TODO: Write me
+   }
+
+   @Override
+   public void mouseDragged(MouseEvent e) {
+      simulation.getWorld().addFuelLine(mouseCoordsToGridCoords(lastMouseEvent),
+                                      mouseCoordsToGridCoords(e));
+      lastMouseEvent = e;
+      repaint();
+   }
+
+   @Override
+   public void mouseMoved(MouseEvent e) {
+      // TODO Auto-generated method stub
+      
    }
 }

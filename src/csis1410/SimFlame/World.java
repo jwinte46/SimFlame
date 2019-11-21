@@ -19,7 +19,7 @@ public class World {
                                    It's better to have it be a set, since
                                    we don't want it to have any duplicate elements */
    private double coolingRate; // the rate at which flame cools
-   private Callback updateCallback; // the callback that gets fired when the world is updated
+   private Callback updateCallback = null; // the callback that gets fired when the world is updated
    
    // Constructors
    
@@ -245,6 +245,10 @@ public class World {
     */
    public void setUpdateCallback(Callback callback) {
       updateCallback = callback;
+   }
+   
+   public Callback getUpdateCallback() {
+      return updateCallback;
    }
    
    /**

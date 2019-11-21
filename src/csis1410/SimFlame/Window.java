@@ -15,6 +15,7 @@ import net.miginfocom.swing.MigLayout;
 import java.awt.Dimension;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
+import javax.swing.JCheckBox;
 
 /**
  * The main window of the program.
@@ -41,6 +42,11 @@ public class Window extends JFrame {
    	JPanel controlPanel = new JPanel();
    	controlPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
    	getContentPane().add(controlPanel, BorderLayout.EAST);
+   	
+   	SimulationPanel simulationPanel = new SimulationPanel(simulation);
+      getContentPane().add(simulationPanel, BorderLayout.WEST);
+      addMouseListener(simulationPanel);
+      addMouseMotionListener(simulationPanel);
    	
    	JButton btnStartSimulation = new JButton("Start");
    	btnStartSimulation.setBounds(6, 6, 70, 25);
@@ -86,8 +92,15 @@ public class Window extends JFrame {
    	});
    	controlPanel.add(btnSaveSimulation);
    	
-   	SimulationPanel simulationPanel = new SimulationPanel(simulation);
-   	getContentPane().add(simulationPanel, BorderLayout.WEST);
+   	JCheckBox chckbxGrid = new JCheckBox("Grid");
+   	chckbxGrid.addActionListener(new ActionListener() {
+   	   public void actionPerformed(ActionEvent arg0) {
+   	      // grid check box
+   	      simulationPanel.setGridVisible(chckbxGrid.isSelected());
+   	   }
+   	});
+   	controlPanel.add(chckbxGrid);
+   	
    	pack(); // makes the frame the appropriate size to accommodate the panel
    }
    
