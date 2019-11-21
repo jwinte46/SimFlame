@@ -24,6 +24,7 @@ public class Window extends JFrame {
    
    // Fields
 	private Simulation simulation;
+   private SimulationPanel simulationPanel;
    
    // Constructors
    
@@ -37,9 +38,9 @@ public class Window extends JFrame {
       setPreferredSize(new Dimension(200, 200));
       setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
    	
-   	JPanel simulationPanel = new JPanel();
-   	getContentPane().add(simulationPanel, BorderLayout.EAST);
-   	simulationPanel.setLayout(new MigLayout("", "[117px]", "[29px][29px][29px][][]"));
+   	JPanel controlPanel = new JPanel();
+   	getContentPane().add(controlPanel, BorderLayout.EAST);
+   	controlPanel.setLayout(new MigLayout("", "[117px]", "[29px][29px][29px][][]"));
    	
    	JButton btnStartSimulation = new JButton("Start");
    	btnStartSimulation.addActionListener(new ActionListener() {
@@ -47,8 +48,8 @@ public class Window extends JFrame {
    			simulation.start();
    		}
    	});
-   	simulationPanel.setLayout(new MigLayout("", "[70px][67px][75px][69px][68px]", "[25px]"));
-   	simulationPanel.add(btnStartSimulation, "cell 0 0,alignx left,aligny top");
+   	controlPanel.setLayout(new MigLayout("", "[70px][67px][75px][69px][68px]", "[25px]"));
+   	controlPanel.add(btnStartSimulation, "cell 0 0,alignx left,aligny top");
    	
    	JButton btnStopSimulation = new JButton("Stop");
    	btnStopSimulation.addActionListener(new ActionListener() {
@@ -56,10 +57,10 @@ public class Window extends JFrame {
    			simulation.stop();
    		}
    	});
-   	simulationPanel.add(btnStopSimulation, "cell 1 0,alignx left,aligny top");
+   	controlPanel.add(btnStopSimulation, "cell 1 0,alignx left,aligny top");
    	
    	JButton btnResetSimulation = new JButton("Reset");
-   	simulationPanel.add(btnResetSimulation, "cell 2 0,alignx left,aligny top");
+   	controlPanel.add(btnResetSimulation, "cell 2 0,alignx left,aligny top");
    	
    	JButton btnLoadSimulation = new JButton("Load");
    	btnLoadSimulation.addActionListener(new ActionListener() {
@@ -68,7 +69,7 @@ public class Window extends JFrame {
    			loadWindow.setVisible(true);
    		}
    	});
-   	simulationPanel.add(btnLoadSimulation, "cell 3 0,alignx left,aligny top");
+   	controlPanel.add(btnLoadSimulation, "cell 3 0,alignx left,aligny top");
    	
    	JButton btnSaveSimulation = new JButton("Save");
    	btnSaveSimulation.addActionListener(new ActionListener() {
@@ -77,7 +78,7 @@ public class Window extends JFrame {
    			saveWindow.setVisible(true);
    		}
    	});
-   	simulationPanel.add(btnSaveSimulation, "cell 4 0,alignx left,aligny top");
+   	controlPanel.add(btnSaveSimulation, "cell 4 0,alignx left,aligny top");
    }
    
 }
