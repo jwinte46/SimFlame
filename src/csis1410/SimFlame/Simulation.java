@@ -80,7 +80,7 @@ public class Simulation {
     * Gets called repeatedly by simulationTimer. Is responsible for progressing the simulation.
     */
    public void step() {
-      // TODO: Write me
+      // TODO: Write this
    }
    
    /**

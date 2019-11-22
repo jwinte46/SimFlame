@@ -27,6 +27,8 @@ public class SimulationPanel extends JPanel implements MouseListener, MouseMotio
    private Color gridColor = Color.WHITE;
    private Color fuelColor = Color.ORANGE;
    private boolean gridVisible = false;
+   private boolean fuelVisible = true;
+   private boolean flameVisible = true;
    private int buttonDown = 0; // 0 = none, 1 = left mouse, 2 = middle mouse, 3 = right mouse
    
    // Private Classes
@@ -104,12 +106,30 @@ public class SimulationPanel extends JPanel implements MouseListener, MouseMotio
       g.setColor(backgroundColor);
       g.fillRect(0, 0, backgroundWidth, backgroundHeight);
       
+      // draw the flame
+      if(flameVisible) {
+         int heatMapLength = simulation.getWorld().getWidth() * simulation.getWorld().getHeight();
+         for(int i = 0; i < heatMapLength; i++) {
+            // test
+            Point p = simulation.getWorld().indexToPoint(i);
+            Color flameColor = new Color((float)(simulation.getWorld().getHeatAt(i)), 0.0f, 0.0f);
+            g.setColor(flameColor);
+   
+            int x = p.getX() * cellSize;
+            int y = p.getY() * cellSize;
+            g.fillRect(x, y, cellSize, cellSize);
+            
+         }
+      }
+      
       // draw fuel
-      g.setColor(fuelColor);
-      for(Point el : simulation.getWorld().getFuelSet()) {
-         int x = el.getX() * cellSize;
-         int y = el.getY() * cellSize;
-         g.fillRect(x, y, cellSize, cellSize);
+      if(fuelVisible) {
+         g.setColor(fuelColor);
+         for(Point el : simulation.getWorld().getFuelSet()) {
+            int x = el.getX() * cellSize;
+            int y = el.getY() * cellSize;
+            g.fillRect(x, y, cellSize, cellSize);
+         }
       }
       
       // draw the grid
@@ -131,6 +151,15 @@ public class SimulationPanel extends JPanel implements MouseListener, MouseMotio
       repaint();
    }
    
+   public void setFuelVisible(boolean b) {
+      fuelVisible = b;
+      repaint();
+   }
+   
+   public void setFlameVisible(boolean b) {
+      flameVisible = b;
+      repaint();
+   }
    @Override
    public void mouseClicked(MouseEvent e) {
       // TODO: Write me

@@ -115,6 +115,26 @@ public class Window extends JFrame {
    	});
    	controlPanel.add(chckbxGrid);
    	
+   	JCheckBox chckbxFlame = new JCheckBox("Flame");
+   	chckbxFlame.setSelected(true);
+   	chckbxFlame.addActionListener(new ActionListener() {
+   	   public void actionPerformed(ActionEvent arg0) {
+   	      // flame check box
+   	      simulationPanel.setFlameVisible(chckbxFlame.isSelected());
+   	   }
+   	});
+   	controlPanel.add(chckbxFlame);
+   	
+   	JCheckBox chckbxFuel = new JCheckBox("Fuel");
+   	chckbxFuel.setSelected(true);
+   	chckbxFuel.addActionListener(new ActionListener() {
+   	   public void actionPerformed(ActionEvent arg0) {
+   	      // fuel check box
+   	      simulationPanel.setFuelVisible(chckbxFuel.isSelected());
+   	   }
+   	});
+   	controlPanel.add(chckbxFuel);
+   	
    	JLabel lblLeftClickTo = new JLabel("Left click to add fuel. Right click to remove fuel");
    	lblLeftClickTo.setHorizontalAlignment(SwingConstants.CENTER);
    	getContentPane().add(lblLeftClickTo, BorderLayout.NORTH);
