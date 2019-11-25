@@ -11,6 +11,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Scanner;
+import java.util.Set;
 
 
 /**
@@ -103,8 +104,11 @@ public class Serializer {
 	    */
 	   StringBuilder sb = new StringBuilder();
 	   sb.append(world.getWidth() + " " + world.getHeight() + "\n\n"); // header and blank line
-	   for(Point el : world.getFuelSet()) { // foreach loop for fuel coordinates
-	      sb.append(el.getX() + " " + el.getY() + "\n");
+	   Set<Point> fuel = world.getFuelSet();
+	   synchronized(fuel) {
+   	   for(Point el : fuel) { // foreach loop for fuel coordinates
+   	      sb.append(el.getX() + " " + el.getY() + "\n");
+   	   }
 	   }
 	   sb.deleteCharAt(sb.length() - 1); // remove the last newline
 	   return sb.toString();

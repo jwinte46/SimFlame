@@ -1,12 +1,17 @@
 package csis1410.SimFlame;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.util.Set;
+import java.util.Timer;
+import java.util.TimerTask;
 
+import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
@@ -19,7 +24,7 @@ public class SimulationPanel extends JPanel implements MouseListener, MouseMotio
    
    // Fields
    private Simulation simulation;
-   private MouseEvent lastMouseEvent = null;
+   private Point lastGridPosition = null;
    private int cellSize = 5; // how big to draw each cell 
    private int worldWidth; // 
    private int worldHeight;
@@ -30,8 +35,19 @@ public class SimulationPanel extends JPanel implements MouseListener, MouseMotio
    private boolean fuelVisible = true;
    private boolean flameVisible = true;
    private int buttonDown = 0; // 0 = none, 1 = left mouse, 2 = middle mouse, 3 = right mouse
+   private Timer mouseDraggedTimer; /* while the mouse is being dragged, repaints the panel at
+                                     * a fixed interval */
+   private long lastDragRepaintTime = 0;
+   
    
    // Private Classes
+   
+   private class mouseDraggedTimerTask extends TimerTask {
+      @Override
+      public void run() {
+         
+      }
+   }
    
    /**
     * The callback that tells the panel to redraw itself
@@ -44,7 +60,8 @@ public class SimulationPanel extends JPanel implements MouseListener, MouseMotio
        * Tells the panel to redraw itself
        */
       public void fire() {
-         repaint();
+         if (lastGridPosition == null)
+            repaint();
       }
       
    }
@@ -124,11 +141,14 @@ public class SimulationPanel extends JPanel implements MouseListener, MouseMotio
       
       // draw fuel
       if(fuelVisible) {
-         g.setColor(fuelColor);
-         for(Point el : simulation.getWorld().getFuelSet()) {
-            int x = el.getX() * cellSize;
-            int y = el.getY() * cellSize;
-            g.fillRect(x, y, cellSize, cellSize);
+         Set<Point> fuel = simulation.getWorld().getFuelSet();
+         synchronized(fuel) {
+            g.setColor(fuelColor);
+            for(Point el : simulation.getWorld().getFuelSet()) {
+               int x = el.getX() * cellSize;
+               int y = el.getY() * cellSize;
+               g.fillRect(x, y, cellSize, cellSize);
+            }
          }
       }
       
@@ -178,7 +198,7 @@ public class SimulationPanel extends JPanel implements MouseListener, MouseMotio
    @Override
    public void mousePressed(MouseEvent e) {
       // we need to initialize the lastMouseEvent variable
-      lastMouseEvent = e;
+      lastGridPosition = mouseCoordsToGridCoords(e);
       int button = e.getButton();
       buttonDown = button;
       if(button == 1) // left button
@@ -190,6 +210,8 @@ public class SimulationPanel extends JPanel implements MouseListener, MouseMotio
    @Override
    public void mouseReleased(MouseEvent e) {
       buttonDown = 0;
+      lastGridPosition = null;
+      repaint();
    }
 
    @Override
@@ -200,14 +222,20 @@ public class SimulationPanel extends JPanel implements MouseListener, MouseMotio
        * mouseReleased methods. buttonDown is an instance variable containing a number
        * corresponding to which mouse button is currently down.
         */
+      long currentTime = System.currentTimeMillis();
+      Point gridCoords = mouseCoordsToGridCoords(e);
       if(buttonDown == 1) // left button
-         simulation.getWorld().addFuelLine(mouseCoordsToGridCoords(lastMouseEvent),
-                                           mouseCoordsToGridCoords(e));
+         simulation.getWorld().addFuelLine(lastGridPosition,
+                                           gridCoords);
       if(buttonDown == 3) // right button
-         simulation.getWorld().removeFuelLine(mouseCoordsToGridCoords(lastMouseEvent),
-                                              mouseCoordsToGridCoords(e));
-      lastMouseEvent = e;
-      repaint();
+         simulation.getWorld().removeFuelLine(lastGridPosition,
+                                              gridCoords);
+
+      lastGridPosition = gridCoords;
+      if(currentTime - lastDragRepaintTime >= 50) {
+         lastDragRepaintTime = currentTime;
+         repaint();
+      }
    }
 
    @Override

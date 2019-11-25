@@ -1,5 +1,6 @@
 package csis1410.SimFlame;
 
+import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -13,11 +14,13 @@ public class Simulation {
    // Fields
    
    private World world; // the world which this simulation operates on
-   // the simulation reads the data from the world's heatmap, and writes into
-   // its own secondHeatMap array. Then it swaps heatMaps with the World.
-   private double[] secondHeatMap;
+   
+   private double[] secondHeatMap; /* the simulation reads the data from the world's heatmap, and writes into
+                                      its own secondHeatMap array. Then it swaps heatMaps with the World.*/
    private Timer simulationTimer; // responsible for calling the step() method at a fixed interval
    private int simulationPeriod; // the number of milliseconds between steps
+   private double coolingRate = 0.04;
+   private double diffusionRate = 0.5;
    
    // Private Classes
    
@@ -47,6 +50,7 @@ public class Simulation {
       this.world = world;
       simulationPeriod = 17; // default to stepping every 17 milliseconds
       simulationTimer = null;
+      secondHeatMap = new double[world.getWidth() * world.getHeight()];
    }
    
    // Methods 
@@ -80,7 +84,69 @@ public class Simulation {
     * Gets called repeatedly by simulationTimer. Is responsible for progressing the simulation.
     */
    public void step() {
-      // TODO: Write this
+      Set<Point> fuel = world.getFuelSet();
+      synchronized(fuel) {
+         seed(); // make fuel hot
+         for(int i = 0; i < world.getWidth() * world.getHeight(); i++) {
+            convect(i); // make heat rise
+            diffuse(i); // smooth heat values
+            cool(i); // cool off         
+         }
+         secondHeatMap = world.swapHeatMap(secondHeatMap);
+      }
+   }
+   
+   /**
+    * Makes the areas with fuel hot
+    */
+   public void seed() {
+      // there's a bug in here. for some reason a ConcurrentModificationException gets thrown
+      for(Point el : world.getFuelSet()) {
+         int x = el.getX();
+         int y = el.getY();
+         secondHeatMap[world.pointToIndex(new Point(x, y))] = 1.0;
+      }
+   }
+   
+   /**
+    * Makes the heat rise
+    * 
+    * @param i the index
+    */
+   public void convect(int i) {
+      Point p = world.indexToPoint(i); // the current index, translated to a point
+      // don't convect on fuel or on the last row
+      if(world.getFuelSet().contains(p) ||
+         p.getY() == world.getHeight() - 1) {
+         return;
+      } else {
+         // make the heat at (x,y) be the same as (x,y+1)
+         secondHeatMap[i] = world.getHeatAt(i + world.getWidth());
+      }
+      
+   }
+   
+   /**
+    * Makes the heat disperse 
+    * 
+    * @param i the index
+    */
+   public void diffuse(int i) {
+      int[] neighbors = {i + 1, i - 1,
+                         i + world.getWidth(),
+                         i - world.getWidth()};
+      
+   }
+   
+   /**
+    * Makes the heat cool off
+    * 
+    * @param i the index
+    */
+   public void cool(int i) {
+      secondHeatMap[i] -= coolingRate;
+      if(secondHeatMap[i] < 0)
+         secondHeatMap[i] = 0;
    }
    
    /**
@@ -122,6 +188,7 @@ public class Simulation {
     */
    public void setSimulationPeriod(int period) {
       simulationPeriod = period;
+      start();
    }
    
    /**
@@ -131,6 +198,22 @@ public class Simulation {
     */
    public Timer getSimulationTimer() {
       return simulationTimer;
+   }
+   
+   /**
+    * Sets the cooling rate of the world
+    * @param coolingRate the new cooling rate
+    */
+   public void setCoolingRate(double coolingRate) {
+      this.coolingRate = coolingRate;
+   }
+   
+   /**
+    * Gets the cooling rate of the world
+    * @return the cooling rate 
+    */
+   public double getCoolingRate() {
+      return coolingRate;
    }
    
 }

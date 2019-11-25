@@ -18,6 +18,10 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
+import javax.swing.JSlider;
+import java.awt.Component;
+import javax.swing.event.ChangeListener;
+import javax.swing.event.ChangeEvent;
 
 /**
  * The main window of the program.
@@ -45,7 +49,7 @@ public class Window extends JFrame {
    	controlPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
    	getContentPane().add(controlPanel, BorderLayout.EAST);
    	
-   	SimulationPanel simulationPanel = new SimulationPanel(simulation);
+   	SimulationPanel simulationPanel = new SimulationPanel(simulation,1);
       getContentPane().add(simulationPanel, BorderLayout.WEST);
       addMouseListener(simulationPanel);
       addMouseMotionListener(simulationPanel);
@@ -138,6 +142,31 @@ public class Window extends JFrame {
    	JLabel lblLeftClickTo = new JLabel("Left click to add fuel. Right click to remove fuel");
    	lblLeftClickTo.setHorizontalAlignment(SwingConstants.CENTER);
    	getContentPane().add(lblLeftClickTo, BorderLayout.NORTH);
+   	
+   	JPanel controlPanel2 = new JPanel();
+   	getContentPane().add(controlPanel2, BorderLayout.SOUTH);
+   	controlPanel2.setLayout(new GridLayout(2, 2, 0, 0));
+   	
+   	JSlider sliderCoolingRate = new JSlider();
+   	sliderCoolingRate.setName("");
+   	sliderCoolingRate.setPaintLabels(true);
+   	sliderCoolingRate.setValue(4);
+   	sliderCoolingRate.setMaximum(50);
+   	sliderCoolingRate.addChangeListener(new ChangeListener() {
+   	   public void stateChanged(ChangeEvent arg0) {
+   	      simulation.setCoolingRate(sliderCoolingRate.getValue() / 100.0);
+   	   }
+   	});
+   	
+   	JLabel lblCoolingRate = new JLabel("Cooling rate");
+   	controlPanel2.add(lblCoolingRate);
+   	
+   	JLabel lblDiffusionRate = new JLabel("Diffusion rate");
+   	controlPanel2.add(lblDiffusionRate);
+   	controlPanel2.add(sliderCoolingRate);
+   	
+   	JSlider slider = new JSlider();
+   	controlPanel2.add(slider);
    	
    	pack(); // makes the frame the appropriate size to accommodate the panel
    }
