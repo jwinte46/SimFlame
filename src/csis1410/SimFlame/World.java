@@ -11,11 +11,13 @@ import java.util.HashSet;
 public class World {
    
    // Fields
-   // TODO change fuel into a hashset
    private int width;
    private int height;
    private double[] heatMap; // contains the heat values for the world
-   private HashSet<Point> fuel; // a list of coordinates which contain fuel
+   private HashSet<Point> fuel; /* a set of coordinates which contain fuel
+                                   NOTE: This used to be an ArrayList.
+                                   It's better to have it be a set, since
+                                   we don't want it to have any duplicate elements */
    private double coolingRate; // the rate at which flame cools
    private Callback updateCallback; // the callback that gets fired when the world is updated
    
@@ -342,9 +344,10 @@ public class World {
    }
    
    /**
-    * @return
+    * Gets the fuel set
+    * @return the fuel set
     */
-   public HashSet<Point> getFuelList() {
+   public HashSet<Point> getFuelSet() {
       return fuel;
    }
    

@@ -93,6 +93,14 @@ public class Simulation {
    }
    
    /**
+    * Sets the world object this simulation operates on
+    * 
+    * @param world the world to set it to
+    */
+   public void setWorld(World world) {
+      this.world = world;
+   }
+   /**
     * Gets the period of this Simulation in milliseconds
     * 
     * @return the period
