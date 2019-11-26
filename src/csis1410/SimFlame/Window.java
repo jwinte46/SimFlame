@@ -3,6 +3,8 @@ package csis1410.SimFlame;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import java.awt.BorderLayout;
+
+import javax.swing.DefaultBoundedRangeModel;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -34,6 +36,10 @@ public class Window extends JFrame {
    // Fields
 	private Simulation simulation;
    
+	// Private classes
+	private class FloatingBoundedRangeModel extends DefaultBoundedRangeModel {
+	   
+	}
    // Constructors
    
    /**
@@ -49,7 +55,7 @@ public class Window extends JFrame {
    	controlPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
    	getContentPane().add(controlPanel, BorderLayout.EAST);
    	
-   	SimulationPanel simulationPanel = new SimulationPanel(simulation,2);
+   	SimulationPanel simulationPanel = new SimulationPanel(simulation,1);
       getContentPane().add(simulationPanel, BorderLayout.WEST);
       addMouseListener(simulationPanel);
       addMouseMotionListener(simulationPanel);
@@ -156,11 +162,12 @@ public class Window extends JFrame {
    	sliderCoolingRate.setMinorTickSpacing(0);
    	sliderCoolingRate.setName("");
    	sliderCoolingRate.setPaintLabels(true);
-   	sliderCoolingRate.setValue(1);
-   	sliderCoolingRate.setMaximum(50);
+   	sliderCoolingRate.setValue(4);
+   	sliderCoolingRate.setMaximum(100);
+   	simulation.setCoolingRate(sliderCoolingRate.getValue() / 1000.0);
    	sliderCoolingRate.addChangeListener(new ChangeListener() {
    	   public void stateChanged(ChangeEvent arg0) {
-   	      simulation.setCoolingRate(sliderCoolingRate.getValue() / 100.0);
+   	      simulation.setCoolingRate(sliderCoolingRate.getValue() / 1000.0);
    	   }
    	});
    	
