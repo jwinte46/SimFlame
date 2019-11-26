@@ -125,7 +125,7 @@ public class Window extends JFrame {
    	});
    	controlPanel.add(btnSaveSimulation);
    	
-   	JCheckBox chckbxFlame = new JCheckBox("Flame");
+   	JCheckBox chckbxFlame = new JCheckBox("View Flame");
    	chckbxFlame.setSelected(true);
    	chckbxFlame.addActionListener(new ActionListener() {
    	   public void actionPerformed(ActionEvent arg0) {
@@ -135,7 +135,7 @@ public class Window extends JFrame {
    	});
    	controlPanel.add(chckbxFlame);
    	
-   	JCheckBox chckbxFuel = new JCheckBox("Fuel");
+   	JCheckBox chckbxFuel = new JCheckBox("View Fuel");
    	chckbxFuel.setSelected(true);
    	chckbxFuel.addActionListener(new ActionListener() {
    	   public void actionPerformed(ActionEvent arg0) {
@@ -144,6 +144,14 @@ public class Window extends JFrame {
    	   }
    	});
    	controlPanel.add(chckbxFuel);
+   	
+   	JCheckBox chckbxViewWind = new JCheckBox("View Wind");
+   	chckbxViewWind.addActionListener(new ActionListener() {
+   	   public void actionPerformed(ActionEvent arg0) {
+   	        simulationPanel.setWindVisible(chckbxViewWind.isSelected());
+   	   }
+   	});
+   	controlPanel.add(chckbxViewWind);
    	
    	JLabel lblLeftClickTo = new JLabel("Left click to add fuel. Right click to remove fuel");
    	lblLeftClickTo.setHorizontalAlignment(SwingConstants.CENTER);

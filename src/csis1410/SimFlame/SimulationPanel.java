@@ -29,14 +29,11 @@ public class SimulationPanel extends JPanel implements MouseListener, MouseMotio
    private int worldWidth; // 
    private int worldHeight;
    private Color backgroundColor = Color.BLACK;
-   private Color gridColor = Color.WHITE;
    private Color fuelColor = Color.ORANGE;
-   private boolean gridVisible = false;
    private boolean fuelVisible = true;
    private boolean flameVisible = true;
+   private boolean windVisible = false;
    private int buttonDown = 0; // 0 = none, 1 = left mouse, 2 = middle mouse, 3 = right mouse
-   private Timer mouseDraggedTimer; /* while the mouse is being dragged, repaints the panel at
-                                     * a fixed interval */
    private long lastDragRepaintTime = 0;
    
    
@@ -124,20 +121,30 @@ public class SimulationPanel extends JPanel implements MouseListener, MouseMotio
       g.fillRect(0, 0, backgroundWidth, backgroundHeight);
       
       // draw the flame
-      if(flameVisible) {
+      if(flameVisible || windVisible) {
          int heatMapLength = simulation.getWorld().getWidth() * simulation.getWorld().getHeight();
          for(int i = 0; i < heatMapLength; i++) {
             // test
             Point p = simulation.getWorld().indexToPoint(i);
-            float redValue = (float)(simulation.getWorld().getHeatAt(i));
-            float greenValue = (float)(simulation.getWorld().getHeatAt(i) / 5);
-            Color flameColor = new Color(redValue, greenValue, 0.0f);
-            g.setColor(flameColor);
-   
             int x = p.getX() * cellSize;
             int y = p.getY() * cellSize;
-            g.fillRect(x, y, cellSize, cellSize);
-            
+            if(flameVisible) {
+               float redValue = (float)(simulation.getWorld().getHeatAt(i));
+               float greenValue = (float)(simulation.getWorld().getHeatAt(i) / 5);
+               Color flameColor = new Color(redValue, greenValue, 0.0f);
+               g.setColor(flameColor);
+               g.fillRect(x, y, cellSize, cellSize);
+            }
+            // Wind
+            /* we're doing this inside of the flame's for loop to make it faster.
+             * it would be wasteful to do another for loop just for the wind.
+             */
+            if(windVisible) {
+               float redWindValue = simulation.getWorld().getWindXAt(i);
+               float greenWindValue = simulation.getWorld().getWindYAt(i);
+               g.setColor(new Color(Math.abs(redWindValue), Math.abs(greenWindValue), 0.0f, 0.5f)); // half transparency
+               g.fillRect(x, y, cellSize, cellSize);
+            }
          }
       }
       
@@ -154,23 +161,6 @@ public class SimulationPanel extends JPanel implements MouseListener, MouseMotio
          }
       }
       
-      // draw the grid
-      if(gridVisible) {
-         g.setColor(gridColor);
-         // vertical lines
-         for(int i = 0; i < worldWidth; i++) {
-            g.drawLine(i * cellSize, 0, i * cellSize, backgroundHeight);
-         }
-         // horizontal lines
-         for(int i = 0; i < worldHeight; i++) {
-            g.drawLine(0, i * cellSize, backgroundWidth, i * cellSize);
-         }
-      }
-   }
-   
-   public void setGridVisible(boolean b) {
-      gridVisible = b;
-      repaint();
    }
    
    public void setFuelVisible(boolean b) {
@@ -178,6 +168,10 @@ public class SimulationPanel extends JPanel implements MouseListener, MouseMotio
       repaint();
    }
    
+   public void setWindVisible(boolean b) {
+      windVisible = b;
+      repaint();
+   }
    public void setFlameVisible(boolean b) {
       flameVisible = b;
       repaint();
