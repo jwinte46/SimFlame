@@ -65,6 +65,7 @@ public class Window extends JFrame {
       JButton btnClear = new JButton("Clear");
       btnClear.addActionListener(new ActionListener() {
          public void actionPerformed(ActionEvent e) {
+            simulation.stop();
             // clear button
             simulation.getWorld().clear();
          }
@@ -96,6 +97,7 @@ public class Window extends JFrame {
    	JButton btnResetSimulation = new JButton("Reset");
    	btnResetSimulation.addActionListener(new ActionListener() {
    	   public void actionPerformed(ActionEvent arg0) {
+   	      simulation.stop();
    	      simulation.reset();
    	   }
    	});
