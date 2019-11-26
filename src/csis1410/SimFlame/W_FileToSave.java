@@ -13,6 +13,14 @@ import javax.swing.JLabel;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
+/**
+ * @author jacobwinters
+ * @class CSIS 1410
+ * @assignment FINAL PROJECT
+ * @date 11/20/19
+ * @description This is our W_FileToSave class. It opens up when the save button is clicked on our GUI
+ * It contains our panels and buttons for our W_FileToSave GUI
+ */
 public class W_FileToSave extends JFrame {
 
 	private JPanel contentPane;

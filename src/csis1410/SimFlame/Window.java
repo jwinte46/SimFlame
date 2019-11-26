@@ -17,8 +17,12 @@ import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 
 /**
+ * @author jacobwinters
+ * @class CSIS 1410
+ * @assignment FINAL PROJECT
+ * @date 11/20/19
+ * @description This is our Window class. It contains our panels and buttons for our GUI
  * The main window of the program.
- * 
  * Contains buttons and sliders for controlling the simulation.
  * Contains a SimulatorPanel.
  */
