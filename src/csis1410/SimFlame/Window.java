@@ -49,7 +49,7 @@ public class Window extends JFrame {
    	controlPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
    	getContentPane().add(controlPanel, BorderLayout.EAST);
    	
-   	SimulationPanel simulationPanel = new SimulationPanel(simulation,1);
+   	SimulationPanel simulationPanel = new SimulationPanel(simulation,2);
       getContentPane().add(simulationPanel, BorderLayout.WEST);
       addMouseListener(simulationPanel);
       addMouseMotionListener(simulationPanel);
@@ -68,7 +68,7 @@ public class Window extends JFrame {
    	btnStartSimulation.addActionListener(new ActionListener() {
    		public void actionPerformed(ActionEvent e) {
    			simulation.start();
-   			btnClear.setEnabled(false);
+   			//btnClear.setEnabled(false);
    		}
    	});
    	controlPanel.setLayout(null);
@@ -80,12 +80,17 @@ public class Window extends JFrame {
    	btnStopSimulation.addActionListener(new ActionListener() {
    		public void actionPerformed(ActionEvent e) {
    			simulation.stop();
-   			btnClear.setEnabled(true);
+   			//btnClear.setEnabled(true);
    		}
    	});
    	controlPanel.add(btnStopSimulation);
    	
    	JButton btnResetSimulation = new JButton("Reset");
+   	btnResetSimulation.addActionListener(new ActionListener() {
+   	   public void actionPerformed(ActionEvent arg0) {
+   	      simulation.reset();
+   	   }
+   	});
    	btnResetSimulation.setBounds(155, 6, 75, 25);
    	controlPanel.add(btnResetSimulation);
    	
@@ -148,9 +153,10 @@ public class Window extends JFrame {
    	controlPanel2.setLayout(new GridLayout(2, 2, 0, 0));
    	
    	JSlider sliderCoolingRate = new JSlider();
+   	sliderCoolingRate.setMinorTickSpacing(0);
    	sliderCoolingRate.setName("");
    	sliderCoolingRate.setPaintLabels(true);
-   	sliderCoolingRate.setValue(4);
+   	sliderCoolingRate.setValue(1);
    	sliderCoolingRate.setMaximum(50);
    	sliderCoolingRate.addChangeListener(new ChangeListener() {
    	   public void stateChanged(ChangeEvent arg0) {

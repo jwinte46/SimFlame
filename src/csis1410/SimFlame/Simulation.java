@@ -3,6 +3,7 @@ package csis1410.SimFlame;
 import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.Random;
 
 /**
  * A simulation of flame
@@ -19,8 +20,9 @@ public class Simulation {
                                       its own secondHeatMap array. Then it swaps heatMaps with the World.*/
    private Timer simulationTimer; // responsible for calling the step() method at a fixed interval
    private int simulationPeriod; // the number of milliseconds between steps
-   private double coolingRate = 0.04;
+   private double coolingRate = 0.01;
    private double diffusionRate = 0.5;
+   private Random rand;
    
    // Private Classes
    
@@ -51,6 +53,7 @@ public class Simulation {
       simulationPeriod = 17; // default to stepping every 17 milliseconds
       simulationTimer = null;
       secondHeatMap = new double[world.getWidth() * world.getHeight()];
+      rand = new Random();
    }
    
    // Methods 
@@ -93,7 +96,7 @@ public class Simulation {
                // seeding
                if(fuel.contains(p)) {
                   // make fuel hot
-                  heatHere = 1.0;
+                  heatHere = 1.0 - (rand.nextDouble() - 0.5);
                } else {
                   // convection
                   heatHere = world.getHeatAt(world.pointToIndex(new Point(i, j + 1)));
@@ -112,6 +115,9 @@ public class Simulation {
                   if(heatHere < 0)
                      heatHere = 0;
                }
+               // clamp
+               if(heatHere > 1.0)
+                  heatHere = 1.0;
                secondHeatMap[world.pointToIndex(p)] = heatHere;
                
             }
