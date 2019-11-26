@@ -15,8 +15,7 @@ public class Main {
     * @param args command line arguments
     */
    public static void main(String[] args) {
-      World world = new World(100, 100);
-      world.addFuelLine(new Point(0, 0), new Point(10, 10)); // remove me
+      World world = new World(400, 400);
       Simulation simulation = new Simulation(world);
       Window window = new Window(simulation);
       window.setVisible(true);

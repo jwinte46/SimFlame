@@ -1,5 +1,6 @@
 package csis1410.SimFlame;
 
+import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -13,11 +14,13 @@ public class Simulation {
    // Fields
    
    private World world; // the world which this simulation operates on
-   // the simulation reads the data from the world's heatmap, and writes into
-   // its own secondHeatMap array. Then it swaps heatMaps with the World.
-   private double[] secondHeatMap;
+   
+   private double[] secondHeatMap; /* the simulation reads the data from the world's heatmap, and writes into
+                                      its own secondHeatMap array. Then it swaps heatMaps with the World.*/
    private Timer simulationTimer; // responsible for calling the step() method at a fixed interval
    private int simulationPeriod; // the number of milliseconds between steps
+   private double coolingRate = 0.04;
+   private double diffusionRate = 0.5;
    
    // Private Classes
    
@@ -47,6 +50,7 @@ public class Simulation {
       this.world = world;
       simulationPeriod = 17; // default to stepping every 17 milliseconds
       simulationTimer = null;
+      secondHeatMap = new double[world.getWidth() * world.getHeight()];
    }
    
    // Methods 
@@ -80,9 +84,52 @@ public class Simulation {
     * Gets called repeatedly by simulationTimer. Is responsible for progressing the simulation.
     */
    public void step() {
-      // TODO: Write me
+      Set<Point> fuel = world.getFuelSet();
+      synchronized(fuel) {
+         for(int i = 0; i < world.getWidth(); i++) {
+            for(int j = 0; j < world.getHeight(); j++) {
+               Point p = new Point(i, j);
+               double heatHere = 0;
+               // seeding
+               if(fuel.contains(p)) {
+                  // make fuel hot
+                  heatHere = 1.0;
+               }
+               
+               // convection
+               
+            }
+         }
+         secondHeatMap = world.swapHeatMap(secondHeatMap);
+      }
    }
    
+   /**
+    * Makes fuel hot
+    * @param p the point to check
+    * @return 1.0 if there's fuel here
+    * @return the previous heat value of this point if there's not fuel
+    */
+   public double seed(Point p) {
+      if(world.getFuelSet().contains(p)) { // if there's fuel
+         return 1.0; // make it hot
+      } else {
+         return world.getHeatAt(p.getX(), p.getY());
+      }
+   }
+   
+   /**
+    * Gets the Point below this one
+    * @param position the point to look below
+    * @return the point below the given one
+    */
+   public Point convectFrom(Point position) {
+      Point newPoint = new Point(position.getX(), position.getY() + 1);
+      if(newPoint.getY() >= world.getHeight())
+         newPoint.setY(world.getHeight() - 1);
+      return newPoint;
+   }
+
    /**
     * Gets the world this Simulation is operating on
     * 
@@ -98,7 +145,13 @@ public class Simulation {
     * @param world the world to set it to
     */
    public void setWorld(World world) {
-      this.world = world;
+      // transfer the old world's callback to the new one if it doesn't have one
+      if(world.getUpdateCallback() == null) {
+         Callback oldCallback = this.world.getUpdateCallback();
+         world.setUpdateCallback(oldCallback);
+      }
+      this.world = world;         
+      world.getUpdateCallback().fire();
    }
    /**
     * Gets the period of this Simulation in milliseconds
@@ -116,6 +169,7 @@ public class Simulation {
     */
    public void setSimulationPeriod(int period) {
       simulationPeriod = period;
+      start();
    }
    
    /**
@@ -125,6 +179,22 @@ public class Simulation {
     */
    public Timer getSimulationTimer() {
       return simulationTimer;
+   }
+   
+   /**
+    * Sets the cooling rate of the world
+    * @param coolingRate the new cooling rate
+    */
+   public void setCoolingRate(double coolingRate) {
+      this.coolingRate = coolingRate;
+   }
+   
+   /**
+    * Gets the cooling rate of the world
+    * @return the cooling rate 
+    */
+   public double getCoolingRate() {
+      return coolingRate;
    }
    
 }
