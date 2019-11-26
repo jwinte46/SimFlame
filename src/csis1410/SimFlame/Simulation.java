@@ -99,11 +99,15 @@ public class Simulation {
                   heatHere = 1.0 - (rand.nextDouble() - 0.5);
                } else {
                   // convection + wind
-                  // set wind to new random values
                   int index = world.pointToIndex(new Point(i, j));
                   int windX = world.getWindXAt(index);
                   int windY = world.getWindYAt(index);
-                  heatHere = world.getHeatAt(world.pointToIndex(new Point(i + windX, j + 1 + windY)));
+                  int convectFrom = world.pointToIndex(new Point(i + windX, j + 1 + windY));
+                  heatHere = world.getHeatAt(convectFrom);
+                  
+                  // set wind to new random values
+                  world.randomizeWindXAt(index);
+                  world.randomizeWindYAt(index);
                   
                   // diffuse
                   double nearbyHeat = 0;
@@ -115,9 +119,9 @@ public class Simulation {
                   double averageHeat = nearbyHeat / 9.0;
                   heatHere = heatHere * (1 - diffusionRate) + averageHeat * diffusionRate;
                   // cool + random variation
-                  double randomCooling = (rand.nextDouble() - 0.5) * 0.25;
+                  double randomCooling = (rand.nextDouble() - 0.5) * 0.125;
                   heatHere -= coolingRate;
-                     if(world.getHeatAt(index) != 0.0)
+                     if(world.getHeatAt(convectFrom) != 0.0)
                         heatHere += randomCooling;
                   if(heatHere < 0)
                      heatHere = 0;

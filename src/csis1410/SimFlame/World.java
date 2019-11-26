@@ -75,6 +75,14 @@ public class World {
    }
    
    /**
+    * Randomizes the wind's x component at the given index
+    * @param i the index
+    */
+   public void randomizeWindXAt(int i) {
+      windMapX[i / windMapBlockSize] = rand.nextInt(3) - 1;
+   }
+   
+   /**
     * Takes an index into the heatMap and returns the 
     * wind y component at that point
     * 
@@ -83,6 +91,14 @@ public class World {
     */
    public int getWindYAt(int i) {
       return windMapY[i / windMapBlockSize];
+   }
+   
+   /**
+    * Randomizes the wind's y component at the given index
+    * @param i the index
+    */
+   public void randomizeWindYAt(int i) {
+      windMapY[i / windMapBlockSize] = rand.nextInt(3) - 1;
    }
    
    public void addFuelAt(Point p) {
