@@ -165,8 +165,13 @@ public class Window extends JFrame {
    	controlPanel2.add(lblDiffusionRate);
    	controlPanel2.add(sliderCoolingRate);
    	
-   	JSlider slider = new JSlider();
-   	controlPanel2.add(slider);
+   	JSlider sliderDiffusionRate = new JSlider();
+   	sliderDiffusionRate.addChangeListener(new ChangeListener() {
+   	   public void stateChanged(ChangeEvent arg0) {
+   	      simulation.setDiffusionRate(sliderDiffusionRate.getValue() / 100.0);
+   	   }
+   	});
+   	controlPanel2.add(sliderDiffusionRate);
    	
    	pack(); // makes the frame the appropriate size to accommodate the panel
    }

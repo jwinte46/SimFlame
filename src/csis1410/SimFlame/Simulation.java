@@ -97,12 +97,20 @@ public class Simulation {
                } else {
                   // convection
                   heatHere = world.getHeatAt(world.pointToIndex(new Point(i, j + 1)));
+                  
+                  // diffuse
+                  double nearbyHeat = 0;
+                  for(int u = -1; u <= 1; u++) {
+                     for(int v = -1; v <= 1; v++) {
+                        nearbyHeat += world.getHeatAt(i + u, j + v);
+                     }
+                  }
+                  double averageHeat = nearbyHeat / 9.0;
+                  heatHere = heatHere * (1 - diffusionRate) + averageHeat * diffusionRate;
                   // cool
                   heatHere -= coolingRate;
                   if(heatHere < 0)
                      heatHere = 0;
-                  // diffuse
-                  
                }
                secondHeatMap[world.pointToIndex(p)] = heatHere;
                
@@ -203,6 +211,10 @@ public class Simulation {
     */
    public double getCoolingRate() {
       return coolingRate;
+   }
+
+   public void setDiffusionRate(double diffusionRate) {
+      this.diffusionRate = diffusionRate;      
    }
    
 }
