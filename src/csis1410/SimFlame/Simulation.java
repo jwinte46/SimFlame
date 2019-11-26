@@ -121,8 +121,8 @@ public class Simulation {
                   // cool + random variation
                   double randomCooling = (rand.nextDouble() - 0.5) * 0.125;
                   heatHere -= coolingRate;
-                     if(world.getHeatAt(convectFrom) != 0.0)
-                        heatHere += randomCooling;
+                  if(world.getHeatAt(convectFrom) != 0.0)
+                     heatHere += randomCooling;
                   if(heatHere < 0)
                      heatHere = 0;
                }

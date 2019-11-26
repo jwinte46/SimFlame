@@ -123,15 +123,6 @@ public class Window extends JFrame {
    	});
    	controlPanel.add(btnSaveSimulation);
    	
-   	JCheckBox chckbxGrid = new JCheckBox("Grid");
-   	chckbxGrid.addActionListener(new ActionListener() {
-   	   public void actionPerformed(ActionEvent arg0) {
-   	      // grid check box
-   	      simulationPanel.setGridVisible(chckbxGrid.isSelected());
-   	   }
-   	});
-   	controlPanel.add(chckbxGrid);
-   	
    	JCheckBox chckbxFlame = new JCheckBox("Flame");
    	chckbxFlame.setSelected(true);
    	chckbxFlame.addActionListener(new ActionListener() {
