@@ -15,6 +15,13 @@ import net.miginfocom.swing.MigLayout;
 import java.awt.Dimension;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
+import javax.swing.JCheckBox;
+import javax.swing.JLabel;
+import javax.swing.SwingConstants;
+import javax.swing.JSlider;
+import java.awt.Component;
+import javax.swing.event.ChangeListener;
+import javax.swing.event.ChangeEvent;
 
 /**
  * The main window of the program.
@@ -35,17 +42,33 @@ public class Window extends JFrame {
     * @param simulation reference to the simulation
     */
    public Window(Simulation simulation) {
+      setResizable(false);
       setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
    	
    	JPanel controlPanel = new JPanel();
    	controlPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
    	getContentPane().add(controlPanel, BorderLayout.EAST);
    	
+   	SimulationPanel simulationPanel = new SimulationPanel(simulation,1);
+      getContentPane().add(simulationPanel, BorderLayout.WEST);
+      addMouseListener(simulationPanel);
+      addMouseMotionListener(simulationPanel);
+      
+      JButton btnClear = new JButton("Clear");
+      btnClear.addActionListener(new ActionListener() {
+         public void actionPerformed(ActionEvent e) {
+            // clear button
+            simulation.getWorld().clear();
+         }
+      });
+      controlPanel.add(btnClear);
+   	
    	JButton btnStartSimulation = new JButton("Start");
    	btnStartSimulation.setBounds(6, 6, 70, 25);
    	btnStartSimulation.addActionListener(new ActionListener() {
    		public void actionPerformed(ActionEvent e) {
    			simulation.start();
+   			btnClear.setEnabled(false);
    		}
    	});
    	controlPanel.setLayout(null);
@@ -57,6 +80,7 @@ public class Window extends JFrame {
    	btnStopSimulation.addActionListener(new ActionListener() {
    		public void actionPerformed(ActionEvent e) {
    			simulation.stop();
+   			btnClear.setEnabled(true);
    		}
    	});
    	controlPanel.add(btnStopSimulation);
@@ -73,6 +97,7 @@ public class Window extends JFrame {
    			loadWindow.setVisible(true);
    		}
    	});
+   	
    	controlPanel.add(btnLoadSimulation);
    	
    	JButton btnSaveSimulation = new JButton("Save");
@@ -85,8 +110,64 @@ public class Window extends JFrame {
    	});
    	controlPanel.add(btnSaveSimulation);
    	
-   	SimulationPanel simulationPanel = new SimulationPanel(simulation.getWorld());
-   	getContentPane().add(simulationPanel, BorderLayout.WEST);
+   	JCheckBox chckbxGrid = new JCheckBox("Grid");
+   	chckbxGrid.addActionListener(new ActionListener() {
+   	   public void actionPerformed(ActionEvent arg0) {
+   	      // grid check box
+   	      simulationPanel.setGridVisible(chckbxGrid.isSelected());
+   	   }
+   	});
+   	controlPanel.add(chckbxGrid);
+   	
+   	JCheckBox chckbxFlame = new JCheckBox("Flame");
+   	chckbxFlame.setSelected(true);
+   	chckbxFlame.addActionListener(new ActionListener() {
+   	   public void actionPerformed(ActionEvent arg0) {
+   	      // flame check box
+   	      simulationPanel.setFlameVisible(chckbxFlame.isSelected());
+   	   }
+   	});
+   	controlPanel.add(chckbxFlame);
+   	
+   	JCheckBox chckbxFuel = new JCheckBox("Fuel");
+   	chckbxFuel.setSelected(true);
+   	chckbxFuel.addActionListener(new ActionListener() {
+   	   public void actionPerformed(ActionEvent arg0) {
+   	      // fuel check box
+   	      simulationPanel.setFuelVisible(chckbxFuel.isSelected());
+   	   }
+   	});
+   	controlPanel.add(chckbxFuel);
+   	
+   	JLabel lblLeftClickTo = new JLabel("Left click to add fuel. Right click to remove fuel");
+   	lblLeftClickTo.setHorizontalAlignment(SwingConstants.CENTER);
+   	getContentPane().add(lblLeftClickTo, BorderLayout.NORTH);
+   	
+   	JPanel controlPanel2 = new JPanel();
+   	getContentPane().add(controlPanel2, BorderLayout.SOUTH);
+   	controlPanel2.setLayout(new GridLayout(2, 2, 0, 0));
+   	
+   	JSlider sliderCoolingRate = new JSlider();
+   	sliderCoolingRate.setName("");
+   	sliderCoolingRate.setPaintLabels(true);
+   	sliderCoolingRate.setValue(4);
+   	sliderCoolingRate.setMaximum(50);
+   	sliderCoolingRate.addChangeListener(new ChangeListener() {
+   	   public void stateChanged(ChangeEvent arg0) {
+   	      simulation.setCoolingRate(sliderCoolingRate.getValue() / 100.0);
+   	   }
+   	});
+   	
+   	JLabel lblCoolingRate = new JLabel("Cooling rate");
+   	controlPanel2.add(lblCoolingRate);
+   	
+   	JLabel lblDiffusionRate = new JLabel("Diffusion rate");
+   	controlPanel2.add(lblDiffusionRate);
+   	controlPanel2.add(sliderCoolingRate);
+   	
+   	JSlider slider = new JSlider();
+   	controlPanel2.add(slider);
+   	
    	pack(); // makes the frame the appropriate size to accommodate the panel
    }
    
