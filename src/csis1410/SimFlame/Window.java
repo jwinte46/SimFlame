@@ -1,8 +1,11 @@
+// TODO: Change file loading/saving to use JFileChooser
 package csis1410.SimFlame;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import java.awt.BorderLayout;
+
+import javax.swing.DefaultBoundedRangeModel;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -16,6 +19,7 @@ import java.awt.Dimension;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JCheckBox;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import javax.swing.JSlider;
@@ -38,6 +42,10 @@ public class Window extends JFrame {
    // Fields
 	private Simulation simulation;
    
+	// Private classes
+	private class FloatingBoundedRangeModel extends DefaultBoundedRangeModel {
+	   
+	}
    // Constructors
    
    /**
@@ -72,7 +80,7 @@ public class Window extends JFrame {
    	btnStartSimulation.addActionListener(new ActionListener() {
    		public void actionPerformed(ActionEvent e) {
    			simulation.start();
-   			btnClear.setEnabled(false);
+   			//btnClear.setEnabled(false);
    		}
    	});
    	controlPanel.setLayout(null);
@@ -84,12 +92,17 @@ public class Window extends JFrame {
    	btnStopSimulation.addActionListener(new ActionListener() {
    		public void actionPerformed(ActionEvent e) {
    			simulation.stop();
-   			btnClear.setEnabled(true);
+   			//btnClear.setEnabled(true);
    		}
    	});
    	controlPanel.add(btnStopSimulation);
    	
    	JButton btnResetSimulation = new JButton("Reset");
+   	btnResetSimulation.addActionListener(new ActionListener() {
+   	   public void actionPerformed(ActionEvent arg0) {
+   	      simulation.reset();
+   	   }
+   	});
    	btnResetSimulation.setBounds(155, 6, 75, 25);
    	controlPanel.add(btnResetSimulation);
    	
@@ -113,15 +126,6 @@ public class Window extends JFrame {
    		}
    	});
    	controlPanel.add(btnSaveSimulation);
-   	
-   	JCheckBox chckbxGrid = new JCheckBox("Grid");
-   	chckbxGrid.addActionListener(new ActionListener() {
-   	   public void actionPerformed(ActionEvent arg0) {
-   	      // grid check box
-   	      simulationPanel.setGridVisible(chckbxGrid.isSelected());
-   	   }
-   	});
-   	controlPanel.add(chckbxGrid);
    	
    	JCheckBox chckbxFlame = new JCheckBox("Flame");
    	chckbxFlame.setSelected(true);
@@ -152,13 +156,15 @@ public class Window extends JFrame {
    	controlPanel2.setLayout(new GridLayout(2, 2, 0, 0));
    	
    	JSlider sliderCoolingRate = new JSlider();
+   	sliderCoolingRate.setMinorTickSpacing(0);
    	sliderCoolingRate.setName("");
    	sliderCoolingRate.setPaintLabels(true);
    	sliderCoolingRate.setValue(4);
-   	sliderCoolingRate.setMaximum(50);
+   	sliderCoolingRate.setMaximum(100);
+   	simulation.setCoolingRate(sliderCoolingRate.getValue() / 1000.0);
    	sliderCoolingRate.addChangeListener(new ChangeListener() {
    	   public void stateChanged(ChangeEvent arg0) {
-   	      simulation.setCoolingRate(sliderCoolingRate.getValue() / 100.0);
+   	      simulation.setCoolingRate(sliderCoolingRate.getValue() / 1000.0);
    	   }
    	});
    	
@@ -169,8 +175,13 @@ public class Window extends JFrame {
    	controlPanel2.add(lblDiffusionRate);
    	controlPanel2.add(sliderCoolingRate);
    	
-   	JSlider slider = new JSlider();
-   	controlPanel2.add(slider);
+   	JSlider sliderDiffusionRate = new JSlider();
+   	sliderDiffusionRate.addChangeListener(new ChangeListener() {
+   	   public void stateChanged(ChangeEvent arg0) {
+   	      simulation.setDiffusionRate(sliderDiffusionRate.getValue() / 100.0);
+   	   }
+   	});
+   	controlPanel2.add(sliderDiffusionRate);
    	
    	pack(); // makes the frame the appropriate size to accommodate the panel
    }

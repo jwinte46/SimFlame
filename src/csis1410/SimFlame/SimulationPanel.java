@@ -129,7 +129,9 @@ public class SimulationPanel extends JPanel implements MouseListener, MouseMotio
          for(int i = 0; i < heatMapLength; i++) {
             // test
             Point p = simulation.getWorld().indexToPoint(i);
-            Color flameColor = new Color((float)(simulation.getWorld().getHeatAt(i)), 0.0f, 0.0f);
+            float redValue = (float)(simulation.getWorld().getHeatAt(i));
+            float greenValue = (float)(simulation.getWorld().getHeatAt(i) / 5);
+            Color flameColor = new Color(redValue, greenValue, 0.0f);
             g.setColor(flameColor);
    
             int x = p.getX() * cellSize;

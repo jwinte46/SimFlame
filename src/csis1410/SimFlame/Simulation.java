@@ -3,6 +3,7 @@ package csis1410.SimFlame;
 import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.Random;
 
 /**
  * A simulation of flame
@@ -19,8 +20,9 @@ public class Simulation {
                                       its own secondHeatMap array. Then it swaps heatMaps with the World.*/
    private Timer simulationTimer; // responsible for calling the step() method at a fixed interval
    private int simulationPeriod; // the number of milliseconds between steps
-   private double coolingRate = 0.04;
+   private double coolingRate = 0.01;
    private double diffusionRate = 0.5;
+   private Random rand;
    
    // Private Classes
    
@@ -51,6 +53,7 @@ public class Simulation {
       simulationPeriod = 17; // default to stepping every 17 milliseconds
       simulationTimer = null;
       secondHeatMap = new double[world.getWidth() * world.getHeight()];
+      rand = new Random();
    }
    
    // Methods 
@@ -93,10 +96,41 @@ public class Simulation {
                // seeding
                if(fuel.contains(p)) {
                   // make fuel hot
-                  heatHere = 1.0;
+                  heatHere = 1.0 - (rand.nextDouble() - 0.5);
+               } else {
+                  // convection + wind
+                  int index = world.pointToIndex(new Point(i, j));
+                  int windX = world.getWindXAt(index);
+                  int windY = world.getWindYAt(index);
+                  int convectFrom = world.pointToIndex(new Point(i + windX, j + 1 + windY));
+                  heatHere = world.getHeatAt(convectFrom);
+                  
+                  // set wind to new random values
+                  world.randomizeWindXAt(index);
+                  world.randomizeWindYAt(index);
+                  
+                  // diffuse
+                  double nearbyHeat = 0;
+                  for(int u = -1; u <= 1; u++) {
+                     for(int v = -1; v <= 1; v++) {
+                        nearbyHeat += world.getHeatAt(i + u, j + v);
+                     }
+                  }
+                  double averageHeat = nearbyHeat / 9.0;
+                  heatHere = heatHere * (1 - diffusionRate) + averageHeat * diffusionRate;
+                  // cool + random variation
+                  double randomCooling = (rand.nextDouble() - 0.5) * 0.125;
+                  heatHere -= coolingRate;
+                  if(world.getHeatAt(convectFrom) != 0.0)
+                     heatHere += randomCooling;
+                  if(heatHere < 0)
+                     heatHere = 0;
                }
+               // clamp
+               if(heatHere > 1.0)
+                  heatHere = 1.0;
+               secondHeatMap[world.pointToIndex(p)] = heatHere;
                
-               // convection
                
             }
          }
@@ -195,6 +229,10 @@ public class Simulation {
     */
    public double getCoolingRate() {
       return coolingRate;
+   }
+
+   public void setDiffusionRate(double diffusionRate) {
+      this.diffusionRate = diffusionRate;      
    }
    
 }
