@@ -13,6 +13,8 @@ import java.util.HashSet;
 import java.util.Scanner;
 import java.util.Set;
 
+import javax.swing.JOptionPane;
+
 
 /**
  * Contains methods for saving/loading the state of the world to/from disk
@@ -32,6 +34,7 @@ public class Serializer {
 			writer.print(serialize(world));
 		}catch(FileNotFoundException e) {
 			System.out.println("File cannot be found.");
+			JOptionPane.showMessageDialog(null, "Invalid Path");
 		}
 	}
 
@@ -61,6 +64,7 @@ public class Serializer {
 	      return world;
 	   } catch(Exception e) {
 	      System.err.print(e.getMessage());
+	      JOptionPane.showMessageDialog(null, "Invalid Path");
 	      return null;
 	   }
 	}

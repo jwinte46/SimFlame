@@ -70,14 +70,16 @@ public class Simulation {
     * Stops the simulation
     */
    public void stop() {
-      simulationTimer.cancel();
+      if(simulationTimer != null)
+         simulationTimer.cancel();
    }
    
    /**
     * Resets the simulation to its initial state
     */
    public void reset() {
-      simulationTimer.cancel();
+      if(simulationTimer != null)
+         simulationTimer.cancel();
       world.resetHeat();
    }
    
@@ -184,7 +186,8 @@ public class Simulation {
          Callback oldCallback = this.world.getUpdateCallback();
          world.setUpdateCallback(oldCallback);
       }
-      this.world = world;         
+      this.world = world;     
+      secondHeatMap = new double[world.getWidth() * world.getHeight()];
       world.getUpdateCallback().fire();
    }
    /**

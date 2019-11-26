@@ -1,4 +1,5 @@
-// TODO: Change file loading/saving to use JFileChooser
+// TODO: Change save and load methods to create a brand new window instead of changing the world in this one
+// TODO: Fix bug where clear button only partially clears the world
 package csis1410.SimFlame;
 
 import javax.swing.JFrame;
@@ -8,13 +9,13 @@ import java.awt.BorderLayout;
 import javax.swing.DefaultBoundedRangeModel;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.awt.event.ActionEvent;
 import java.awt.GridLayout;
 import java.awt.FlowLayout;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
-import net.miginfocom.swing.MigLayout;
 import java.awt.Dimension;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
@@ -26,6 +27,10 @@ import javax.swing.JSlider;
 import java.awt.Component;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JMenu;
 
 /**
  * The main window of the program.
@@ -37,6 +42,7 @@ public class Window extends JFrame {
    
    // Fields
 	private Simulation simulation;
+   private JFrame referenceToThisWindow; // for passing to subwindows
    
 	// Private classes
 	private class FloatingBoundedRangeModel extends DefaultBoundedRangeModel {
@@ -50,6 +56,7 @@ public class Window extends JFrame {
     * @param simulation reference to the simulation
     */
    public Window(Simulation simulation) {
+      referenceToThisWindow = this;
       setResizable(false);
       setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
    	
@@ -70,60 +77,39 @@ public class Window extends JFrame {
             simulation.getWorld().clear();
          }
       });
+      
+      JButton btnStartSimulation = new JButton("Start");
+      btnStartSimulation.setBounds(6, 6, 70, 25);
+      btnStartSimulation.addActionListener(new ActionListener() {
+      	public void actionPerformed(ActionEvent e) {
+      		simulation.start();
+      		//btnClear.setEnabled(false);
+      	}
+      });
+      controlPanel.add(btnStartSimulation);
+      
+      JButton btnStopSimulation = new JButton("Stop");
+      btnStopSimulation.setBounds(82, 6, 67, 25);
+      btnStopSimulation.addActionListener(new ActionListener() {
+      	public void actionPerformed(ActionEvent e) {
+      		simulation.stop();
+      		//btnClear.setEnabled(true);
+      	}
+      });
+      controlPanel.add(btnStopSimulation);
+      
+      JButton btnResetSimulation = new JButton("Reset");
+      btnResetSimulation.addActionListener(new ActionListener() {
+         public void actionPerformed(ActionEvent arg0) {
+            simulation.stop();
+            simulation.reset();
+         }
+      });
+      btnResetSimulation.setBounds(155, 6, 75, 25);
+      controlPanel.add(btnResetSimulation);
       controlPanel.add(btnClear);
-   	
-   	JButton btnStartSimulation = new JButton("Start");
-   	btnStartSimulation.setBounds(6, 6, 70, 25);
-   	btnStartSimulation.addActionListener(new ActionListener() {
-   		public void actionPerformed(ActionEvent e) {
-   			simulation.start();
-   			//btnClear.setEnabled(false);
-   		}
-   	});
    	controlPanel.setLayout(null);
    	controlPanel.setLayout(new GridLayout(0, 1, 0, 10));
-   	controlPanel.add(btnStartSimulation);
-   	
-   	JButton btnStopSimulation = new JButton("Stop");
-   	btnStopSimulation.setBounds(82, 6, 67, 25);
-   	btnStopSimulation.addActionListener(new ActionListener() {
-   		public void actionPerformed(ActionEvent e) {
-   			simulation.stop();
-   			//btnClear.setEnabled(true);
-   		}
-   	});
-   	controlPanel.add(btnStopSimulation);
-   	
-   	JButton btnResetSimulation = new JButton("Reset");
-   	btnResetSimulation.addActionListener(new ActionListener() {
-   	   public void actionPerformed(ActionEvent arg0) {
-   	      simulation.stop();
-   	      simulation.reset();
-   	   }
-   	});
-   	btnResetSimulation.setBounds(155, 6, 75, 25);
-   	controlPanel.add(btnResetSimulation);
-   	
-   	JButton btnLoadSimulation = new JButton("Load");
-   	btnLoadSimulation.setBounds(236, 6, 69, 25);
-   	btnLoadSimulation.addActionListener(new ActionListener() {
-   		public void actionPerformed(ActionEvent e) {
-   			W_FileToLoad loadWindow = new W_FileToLoad(simulation);
-   			loadWindow.setVisible(true);
-   		}
-   	});
-   	
-   	controlPanel.add(btnLoadSimulation);
-   	
-   	JButton btnSaveSimulation = new JButton("Save");
-   	btnSaveSimulation.setBounds(311, 6, 68, 25);
-   	btnSaveSimulation.addActionListener(new ActionListener() {
-   		public void actionPerformed(ActionEvent e) {
-   			W_FileToSave saveWindow = new W_FileToSave(simulation);
-   			saveWindow.setVisible(true);
-   		}
-   	});
-   	controlPanel.add(btnSaveSimulation);
    	
    	JCheckBox chckbxFlame = new JCheckBox("View Flame");
    	chckbxFlame.setSelected(true);
@@ -190,6 +176,54 @@ public class Window extends JFrame {
    	controlPanel2.add(sliderDiffusionRate);
    	
    	pack(); // makes the frame the appropriate size to accommodate the panel
+   	
+   	JMenuBar menuBar = new JMenuBar();
+   	setJMenuBar(menuBar);
+   	
+   	JMenu mnFile = new JMenu("File");
+   	menuBar.add(mnFile);
+   	
+   	JMenuItem mntmNew = new JMenuItem("New");
+   	mnFile.add(mntmNew);
+   	
+   	JMenuItem mntmLoad = new JMenuItem("Load");
+   	mntmLoad.addActionListener(new ActionListener() {
+   	   public void actionPerformed(ActionEvent arg0) {
+   	      File currentDir = new File(".");
+   	      JFileChooser fileChooser = new JFileChooser(currentDir.getAbsolutePath());
+   	      int result = fileChooser.showOpenDialog(referenceToThisWindow);
+   	      if(result == JFileChooser.APPROVE_OPTION) {
+   	         World world = Serializer.load(fileChooser.getSelectedFile().getPath());
+   	         if(world != null) {
+   	            Simulation newSimulation = new Simulation(world);
+   	            Window newWindow = new Window(newSimulation);
+   	            newWindow.setVisible(true);
+   	         } else {
+   	            JOptionPane.showMessageDialog(null, "Error loading file");
+   	         }
+   	      }
+   	      if(result == JFileChooser.ERROR_OPTION) {
+   	         System.err.println("File could not be loaded");
+   	      }
+   	   }
+   	});
+   	mnFile.add(mntmLoad);
+   	
+   	JMenuItem mntmSave = new JMenuItem("Save");
+   	mntmSave.addActionListener(new ActionListener() {
+   	   public void actionPerformed(ActionEvent arg0) {
+   	      File currentDir = new File(".");
+   	      JFileChooser fileChooser = new JFileChooser(currentDir.getAbsolutePath());
+   	      int result = fileChooser.showSaveDialog(referenceToThisWindow);
+   	      if(result == JFileChooser.APPROVE_OPTION) {
+   	         Serializer.save(simulation.getWorld(), fileChooser.getSelectedFile().getPath());
+   	      }
+   	      if(result == JFileChooser.ERROR_OPTION) {
+   	         System.err.println("File could not be saved");
+   	      }
+   	   }
+   	});
+   	mnFile.add(mntmSave);
    }
    
 }
