@@ -98,8 +98,12 @@ public class Simulation {
                   // make fuel hot
                   heatHere = 1.0 - (rand.nextDouble() - 0.5);
                } else {
-                  // convection
-                  heatHere = world.getHeatAt(world.pointToIndex(new Point(i, j + 1)));
+                  // convection + wind
+                  // set wind to new random values
+                  int index = world.pointToIndex(new Point(i, j));
+                  int windX = world.getWindXAt(index);
+                  int windY = world.getWindYAt(index);
+                  heatHere = world.getHeatAt(world.pointToIndex(new Point(i + windX, j + 1 + windY)));
                   
                   // diffuse
                   double nearbyHeat = 0;
@@ -110,8 +114,11 @@ public class Simulation {
                   }
                   double averageHeat = nearbyHeat / 9.0;
                   heatHere = heatHere * (1 - diffusionRate) + averageHeat * diffusionRate;
-                  // cool
+                  // cool + random variation
+                  double randomCooling = (rand.nextDouble() - 0.5) * 0.25;
                   heatHere -= coolingRate;
+                     if(world.getHeatAt(index) != 0.0)
+                        heatHere += randomCooling;
                   if(heatHere < 0)
                      heatHere = 0;
                }
@@ -119,6 +126,7 @@ public class Simulation {
                if(heatHere > 1.0)
                   heatHere = 1.0;
                secondHeatMap[world.pointToIndex(p)] = heatHere;
+               
                
             }
          }

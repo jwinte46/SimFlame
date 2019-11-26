@@ -1,3 +1,4 @@
+// TODO: Change file loading/saving to use JFileChooser
 package csis1410.SimFlame;
 
 import javax.swing.JFrame;
@@ -18,6 +19,7 @@ import java.awt.Dimension;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JCheckBox;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import javax.swing.JSlider;

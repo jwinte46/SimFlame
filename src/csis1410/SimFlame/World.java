@@ -2,6 +2,7 @@ package csis1410.SimFlame;
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Random;
 import java.util.Set;
 
 /**
@@ -19,8 +20,11 @@ public class World {
                                    NOTE: This used to be an ArrayList.
                                    It's better to have it be a set, since
                                    we don't want it to have any duplicate elements */
-   
+   private int[] windMapX; // contains the x component of wind vectors. Lower resolution than heatMap
+   private int[] windMapY; // y component
+   private int windMapBlockSize = 16; // the windMap contains one element for every windMapBlockSize elements of heatMap
    private Callback heatUpdateCallback = null; // the callback that gets fired when the world is updated
+   private Random rand;
    
    // Constructors
    
@@ -42,9 +46,44 @@ public class World {
       heatMap = new double[width * height];
       Arrays.fill(heatMap, 0.0);
       fuel = new HashSet<Point>();
+      rand = new Random();
+      // wind
+      int windMapLength = (width * height) / windMapBlockSize + windMapBlockSize; /* 1 element of the wind map for
+                                                                                   * every windMapBlockSize of the heat map.
+                                                                                   * Adding windMapBlockSize in case the numbers
+                                                                                   * don't divide evenly. This means there may
+                                                                                   * be slightly more wind than needed. */
+      windMapX = new int[windMapLength];
+      windMapY = new int[windMapLength];
+      for(int i = 0; i < windMapLength; i++) {
+         windMapX[i] = rand.nextInt(3) - 1;
+         windMapY[i] = rand.nextInt(3) - 1;
+      }
    }
    
    // Methods
+   
+   /**
+    * Takes an index into the heatMap and returns the 
+    * wind x component at that point
+    * 
+    * @param i the index
+    * @return the wind x component between -1 and 1
+    */
+   public int getWindXAt(int i) {
+      return windMapX[i / windMapBlockSize];
+   }
+   
+   /**
+    * Takes an index into the heatMap and returns the 
+    * wind y component at that point
+    * 
+    * @param i the index
+    * @return the wind y component between -1 and 1
+    */
+   public int getWindYAt(int i) {
+      return windMapY[i / windMapBlockSize];
+   }
    
    public void addFuelAt(Point p) {
       int x = p.getX();
