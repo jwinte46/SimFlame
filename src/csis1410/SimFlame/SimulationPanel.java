@@ -73,20 +73,7 @@ public class SimulationPanel extends JPanel implements MouseListener, MouseMotio
       this.simulation = simulation;
       this.worldWidth = simulation.getWorld().getWidth();
       this.worldHeight = simulation.getWorld().getHeight();
-      setPreferredSize(new Dimension(worldWidth * cellSize, worldHeight * cellSize));
-      simulation.getWorld().setUpdateCallback(new RedrawCallback());
-   }
-   
-   /**
-    * Constructor for SimulationPanel with a user provided cell size
-    * @param simulation the simulation
-    * @param cellSize the cell size
-    */
-   public SimulationPanel(Simulation simulation, int cellSize) {
-      this.simulation = simulation;
-      this.worldWidth = simulation.getWorld().getWidth();
-      this.worldHeight = simulation.getWorld().getHeight();
-      this.cellSize = cellSize; 
+      this.cellSize = simulation.getWorld().getPixelSize();
       setPreferredSize(new Dimension(worldWidth * cellSize, worldHeight * cellSize));
       simulation.getWorld().setUpdateCallback(new RedrawCallback());
    }

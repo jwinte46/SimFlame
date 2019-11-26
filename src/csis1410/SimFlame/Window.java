@@ -9,6 +9,8 @@ import java.awt.BorderLayout;
 import javax.swing.DefaultBoundedRangeModel;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.File;
 import java.awt.event.ActionEvent;
 import java.awt.GridLayout;
@@ -43,11 +45,8 @@ public class Window extends JFrame {
    // Fields
 	private Simulation simulation;
    private JFrame referenceToThisWindow; // for passing to subwindows
+   private static int numWindows = 0; // the number of instances of this class in existence 
    
-	// Private classes
-	private class FloatingBoundedRangeModel extends DefaultBoundedRangeModel {
-	   
-	}
    // Constructors
    
    /**
@@ -56,15 +55,26 @@ public class Window extends JFrame {
     * @param simulation reference to the simulation
     */
    public Window(Simulation simulation) {
+      numWindows++;
+      setTitle("SimFlame");
       referenceToThisWindow = this;
-      setResizable(false);
-      setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+      // we have to override the default behavior when the window is closed
+      setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+      addWindowListener(new WindowAdapter() {
+         @Override
+         public void windowClosing(WindowEvent event) {
+            numWindows--;
+            if(numWindows == 0)
+               System.exit(0);
+            else dispose();
+         }
+      });
    	
    	JPanel controlPanel = new JPanel();
    	controlPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
    	getContentPane().add(controlPanel, BorderLayout.EAST);
    	
-   	SimulationPanel simulationPanel = new SimulationPanel(simulation,1);
+   	SimulationPanel simulationPanel = new SimulationPanel(simulation);
       getContentPane().add(simulationPanel, BorderLayout.WEST);
       addMouseListener(simulationPanel);
       addMouseMotionListener(simulationPanel);
@@ -184,6 +194,12 @@ public class Window extends JFrame {
    	menuBar.add(mnFile);
    	
    	JMenuItem mntmNew = new JMenuItem("New");
+   	mntmNew.addActionListener(new ActionListener() {
+   	   public void actionPerformed(ActionEvent arg0) {
+   	      NewWorldWizard nww = new NewWorldWizard();
+   	      nww.setVisible(true);
+   	   }
+   	});
    	mnFile.add(mntmNew);
    	
    	JMenuItem mntmLoad = new JMenuItem("Load");
@@ -226,4 +242,12 @@ public class Window extends JFrame {
    	mnFile.add(mntmSave);
    }
    
+   /**
+    * Gets the number of instances of this class
+    * @return the number of windows
+    */
+   public static int getNumWindows() {
+      return numWindows;
+      
+   }
 }
