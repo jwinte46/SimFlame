@@ -18,6 +18,14 @@ import javax.swing.JLabel;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
+/**
+ * @author jacobwinters
+ * @class CSIS 1410
+ * @assignment FINAL PROJECT
+ * @date 11/20/19
+ * @description This is our W_FileToLoad class. It opens up when the load button is clicked on our GUI
+ * It contains our panels and buttons for our W_FileToLoad GUI.
+ * */
 public class W_FileToLoad extends JFrame {
 
 	private JPanel contentPane;
