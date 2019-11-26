@@ -94,9 +94,17 @@ public class Simulation {
                if(fuel.contains(p)) {
                   // make fuel hot
                   heatHere = 1.0;
+               } else {
+                  // convection
+                  heatHere = world.getHeatAt(world.pointToIndex(new Point(i, j + 1)));
+                  // cool
+                  heatHere -= coolingRate;
+                  if(heatHere < 0)
+                     heatHere = 0;
+                  // diffuse
+                  
                }
-               
-               // convection
+               secondHeatMap[world.pointToIndex(p)] = heatHere;
                
             }
          }
