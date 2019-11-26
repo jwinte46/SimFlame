@@ -86,69 +86,50 @@ public class Simulation {
    public void step() {
       Set<Point> fuel = world.getFuelSet();
       synchronized(fuel) {
-         seed(); // make fuel hot
-         for(int i = 0; i < world.getWidth() * world.getHeight(); i++) {
-            convect(i); // make heat rise
-            diffuse(i); // smooth heat values
-            cool(i); // cool off         
+         for(int i = 0; i < world.getWidth(); i++) {
+            for(int j = 0; j < world.getHeight(); j++) {
+               Point p = new Point(i, j);
+               double heatHere = 0;
+               // seeding
+               if(fuel.contains(p)) {
+                  // make fuel hot
+                  heatHere = 1.0;
+               }
+               
+               // convection
+               
+            }
          }
          secondHeatMap = world.swapHeatMap(secondHeatMap);
       }
    }
    
    /**
-    * Makes the areas with fuel hot
+    * Makes fuel hot
+    * @param p the point to check
+    * @return 1.0 if there's fuel here
+    * @return the previous heat value of this point if there's not fuel
     */
-   public void seed() {
-      // there's a bug in here. for some reason a ConcurrentModificationException gets thrown
-      for(Point el : world.getFuelSet()) {
-         int x = el.getX();
-         int y = el.getY();
-         secondHeatMap[world.pointToIndex(new Point(x, y))] = 1.0;
-      }
-   }
-   
-   /**
-    * Makes the heat rise
-    * 
-    * @param i the index
-    */
-   public void convect(int i) {
-      Point p = world.indexToPoint(i); // the current index, translated to a point
-      // don't convect on fuel or on the last row
-      if(world.getFuelSet().contains(p) ||
-         p.getY() == world.getHeight() - 1) {
-         return;
+   public double seed(Point p) {
+      if(world.getFuelSet().contains(p)) { // if there's fuel
+         return 1.0; // make it hot
       } else {
-         // make the heat at (x,y) be the same as (x,y+1)
-         secondHeatMap[i] = world.getHeatAt(i + world.getWidth());
+         return world.getHeatAt(p.getX(), p.getY());
       }
-      
    }
    
    /**
-    * Makes the heat disperse 
-    * 
-    * @param i the index
+    * Gets the Point below this one
+    * @param position the point to look below
+    * @return the point below the given one
     */
-   public void diffuse(int i) {
-      int[] neighbors = {i + 1, i - 1,
-                         i + world.getWidth(),
-                         i - world.getWidth()};
-      
+   public Point convectFrom(Point position) {
+      Point newPoint = new Point(position.getX(), position.getY() + 1);
+      if(newPoint.getY() >= world.getHeight())
+         newPoint.setY(world.getHeight() - 1);
+      return newPoint;
    }
-   
-   /**
-    * Makes the heat cool off
-    * 
-    * @param i the index
-    */
-   public void cool(int i) {
-      secondHeatMap[i] -= coolingRate;
-      if(secondHeatMap[i] < 0)
-         secondHeatMap[i] = 0;
-   }
-   
+
    /**
     * Gets the world this Simulation is operating on
     * 

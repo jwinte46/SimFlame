@@ -340,7 +340,17 @@ public class World {
     * @return the heat value
     */
    public double getHeatAt(int x, int y) {
-      return heatMap[pointToIndex(new Point(x, y))];
+      int newX = x;
+      int newY = y;
+      if(x < 0)
+         newX = 0;
+      if(x >= width)
+         newX = width - 1;
+      if(y < 0)
+         newY = 0;
+      if(y >= height)
+         newY = height - 1;
+      return heatMap[pointToIndex(new Point(newX, newY))];
    }
    
    /**
@@ -349,7 +359,12 @@ public class World {
     * @return the heat value
     */
    public double getHeatAt(int i) {
-      return heatMap[i];
+      int newI = i;
+      if(i < 0)
+         newI = 0;
+      if(i >= width * height)
+         newI = width * height - 1;
+      return heatMap[newI];
    }
 
    
