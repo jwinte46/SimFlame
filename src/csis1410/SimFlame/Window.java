@@ -1,4 +1,3 @@
-// TODO: Change save and load methods to create a brand new window instead of changing the world in this one
 // TODO: Fix bug where clear button only partially clears the world
 package csis1410.SimFlame;
 
@@ -6,7 +5,6 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import java.awt.BorderLayout;
 
-import javax.swing.DefaultBoundedRangeModel;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -33,6 +31,8 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JMenu;
+import javax.swing.JRadioButton;
+import javax.swing.ButtonGroup;
 
 /**
  * The main window of the program.
@@ -46,6 +46,7 @@ public class Window extends JFrame {
 	private Simulation simulation;
    private JFrame referenceToThisWindow; // for passing to subwindows
    private static int numWindows = 0; // the number of instances of this class in existence 
+   private final ButtonGroup buttonGroup = new ButtonGroup();
    
    // Constructors
    
@@ -149,6 +150,16 @@ public class Window extends JFrame {
    	});
    	controlPanel.add(chckbxViewWind);
    	
+   	JRadioButton rdbtnOrangeFlame = new JRadioButton("Orange Flame");
+   	rdbtnOrangeFlame.setSelected(true);
+   	buttonGroup.add(rdbtnOrangeFlame);
+   	controlPanel.add(rdbtnOrangeFlame);
+   	
+   	JRadioButton rdbtnBlueFlame = new JRadioButton("Blue Flame");
+   	buttonGroup.add(rdbtnBlueFlame);
+   	controlPanel.add(rdbtnBlueFlame);
+   	
+   	
    	JLabel lblLeftClickTo = new JLabel("Left click to add fuel. Right click to remove fuel");
    	lblLeftClickTo.setHorizontalAlignment(SwingConstants.CENTER);
    	getContentPane().add(lblLeftClickTo, BorderLayout.NORTH);
@@ -248,6 +259,5 @@ public class Window extends JFrame {
     */
    public static int getNumWindows() {
       return numWindows;
-      
    }
 }
