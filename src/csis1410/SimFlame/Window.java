@@ -33,6 +33,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JMenu;
 import javax.swing.JRadioButton;
 import javax.swing.ButtonGroup;
+import javax.swing.JCheckBoxMenuItem;
+import javax.swing.JRadioButtonMenuItem;
 
 /**
  * The main window of the program.
@@ -121,43 +123,6 @@ public class Window extends JFrame {
       controlPanel.add(btnClear);
    	controlPanel.setLayout(null);
    	controlPanel.setLayout(new GridLayout(0, 1, 0, 10));
-   	
-   	JCheckBox chckbxFlame = new JCheckBox("View Flame");
-   	chckbxFlame.setSelected(true);
-   	chckbxFlame.addActionListener(new ActionListener() {
-   	   public void actionPerformed(ActionEvent arg0) {
-   	      // flame check box
-   	      simulationPanel.setFlameVisible(chckbxFlame.isSelected());
-   	   }
-   	});
-   	controlPanel.add(chckbxFlame);
-   	
-   	JCheckBox chckbxFuel = new JCheckBox("View Fuel");
-   	chckbxFuel.setSelected(true);
-   	chckbxFuel.addActionListener(new ActionListener() {
-   	   public void actionPerformed(ActionEvent arg0) {
-   	      // fuel check box
-   	      simulationPanel.setFuelVisible(chckbxFuel.isSelected());
-   	   }
-   	});
-   	controlPanel.add(chckbxFuel);
-   	
-   	JCheckBox chckbxViewWind = new JCheckBox("View Wind");
-   	chckbxViewWind.addActionListener(new ActionListener() {
-   	   public void actionPerformed(ActionEvent arg0) {
-   	        simulationPanel.setWindVisible(chckbxViewWind.isSelected());
-   	   }
-   	});
-   	controlPanel.add(chckbxViewWind);
-   	
-   	JRadioButton rdbtnOrangeFlame = new JRadioButton("Orange Flame");
-   	rdbtnOrangeFlame.setSelected(true);
-   	buttonGroup.add(rdbtnOrangeFlame);
-   	controlPanel.add(rdbtnOrangeFlame);
-   	
-   	JRadioButton rdbtnBlueFlame = new JRadioButton("Blue Flame");
-   	buttonGroup.add(rdbtnBlueFlame);
-   	controlPanel.add(rdbtnBlueFlame);
    	
    	
    	JLabel lblLeftClickTo = new JLabel("Left click to add fuel. Right click to remove fuel");
@@ -251,6 +216,53 @@ public class Window extends JFrame {
    	   }
    	});
    	mnFile.add(mntmSave);
+   	
+   	JMenuItem mntmQuit = new JMenuItem("Quit");
+   	mntmQuit.addActionListener(new ActionListener() {
+   	   public void actionPerformed(ActionEvent arg0) {
+   	      System.exit(0);
+   	   }
+   	});
+   	mnFile.add(mntmQuit);
+   	
+   	JMenu mnView = new JMenu("View");
+   	menuBar.add(mnView);
+   	
+   	JCheckBoxMenuItem chckbxFlame = new JCheckBoxMenuItem("View Flame");
+   	chckbxFlame.addActionListener(new ActionListener() {
+         public void actionPerformed(ActionEvent arg0) {
+            // flame check box
+            simulationPanel.setFlameVisible(chckbxFlame.isSelected());
+         }
+      });
+   	mnView.add(chckbxFlame);
+   	chckbxFlame.setSelected(true);
+   	
+   	JCheckBoxMenuItem chckbxFuel = new JCheckBoxMenuItem("View Fuel");
+   	chckbxFuel.addActionListener(new ActionListener() {
+   	   public void actionPerformed(ActionEvent arg0) {
+   	      simulationPanel.setFuelVisible(chckbxFuel.isSelected());
+   	   }
+   	});
+   	mnView.add(chckbxFuel);
+   	chckbxFuel.setSelected(true);
+   	
+   	JCheckBoxMenuItem chckbxViewWind = new JCheckBoxMenuItem("View Wind");
+   	chckbxViewWind.addActionListener(new ActionListener() {
+   	   public void actionPerformed(ActionEvent arg0) {
+            simulationPanel.setWindVisible(chckbxViewWind.isSelected());
+   	   }
+   	});
+   	mnView.add(chckbxViewWind);
+   	
+   	JRadioButtonMenuItem rdbtnOrangeFlame = new JRadioButtonMenuItem("Orange Flame");
+   	mnView.add(rdbtnOrangeFlame);
+   	rdbtnOrangeFlame.setSelected(true);
+   	buttonGroup.add(rdbtnOrangeFlame);
+   	
+   	JRadioButtonMenuItem rdbtnBlueFlame = new JRadioButtonMenuItem("Blue Flame");
+   	mnView.add(rdbtnBlueFlame);
+   	buttonGroup.add(rdbtnBlueFlame);
    }
    
    /**
