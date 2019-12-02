@@ -3,6 +3,7 @@ package csis1410.SimFlame;
 /**
  * An interface for callbacks to conform to.
  * 
+ * @author Tim Hansen
  */
 public interface Callback {
    

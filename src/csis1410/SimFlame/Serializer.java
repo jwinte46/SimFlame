@@ -18,6 +18,8 @@ import javax.swing.JOptionPane;
 
 /**
  * Contains methods for saving/loading the state of the world to/from disk
+ * 
+ * @authors Adrianna Jones and Tim Hansen
  */
 public class Serializer {
    

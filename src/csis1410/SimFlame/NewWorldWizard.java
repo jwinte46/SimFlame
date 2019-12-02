@@ -1,4 +1,3 @@
-
 package csis1410.SimFlame;
 
 import javax.swing.JFrame;
@@ -15,6 +14,11 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.Dimension;
 
+/**
+ * Window where the user inputs the parameters to construct a new world with
+ * 
+ * @author Tim Hansen
+ */
 public class NewWorldWizard extends JFrame {
    
    private int newWidth = 1;

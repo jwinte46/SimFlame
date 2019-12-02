@@ -12,26 +12,17 @@ import java.awt.event.WindowEvent;
 import java.io.File;
 import java.awt.event.ActionEvent;
 import java.awt.GridLayout;
-import java.awt.FlowLayout;
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
-import java.awt.Dimension;
-import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
-import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import javax.swing.JSlider;
-import java.awt.Component;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JMenu;
-import javax.swing.JRadioButton;
 import javax.swing.ButtonGroup;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JRadioButtonMenuItem;
@@ -41,6 +32,8 @@ import javax.swing.JRadioButtonMenuItem;
  * 
  * Contains buttons and sliders for controlling the simulation.
  * Contains a SimulatorPanel.
+ * 
+ * @authors Jacob Winters and Tim Hansen
  */
 public class Window extends JFrame {
    
