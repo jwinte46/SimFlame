@@ -13,9 +13,13 @@ import java.util.HashSet;
 import java.util.Scanner;
 import java.util.Set;
 
+import javax.swing.JOptionPane;
+
 
 /**
  * Contains methods for saving/loading the state of the world to/from disk
+ * 
+ * @authors Adrianna Jones and Tim Hansen
  */
 public class Serializer {
    
@@ -32,6 +36,7 @@ public class Serializer {
 			writer.print(serialize(world));
 		}catch(FileNotFoundException e) {
 			System.out.println("File cannot be found.");
+			JOptionPane.showMessageDialog(null, "Invalid Path");
 		}
 	}
 
@@ -61,6 +66,7 @@ public class Serializer {
 	      return world;
 	   } catch(Exception e) {
 	      System.err.print(e.getMessage());
+	      JOptionPane.showMessageDialog(null, "Invalid Path");
 	      return null;
 	   }
 	}
@@ -87,13 +93,13 @@ public class Serializer {
 	    * Let's not use the standard object serialization Java provides for us.
 	    * Instead, let's just write the coordinates manually.
 	    * 
-	    * The first line of the file will contain the width and height
+	    * The first line of the file will contain the width, height and pixel size
 	    * The second line will be blank
 	    * The third line and onward will contain the coordinates of fuel
 	    * 
-	    * For example, a 300*200 world containing fuel at points (0,0), (10, 12), and (231, 168):
+	    * For example, a 300*200 world with a pixel size of 1 containing fuel at points (0,0), (10, 12), and (231, 168):
 	    * 
-	    * 300 200
+	    * 300 200 1
 	    * 
 	    * 0 0
 	    * 10 12
@@ -103,7 +109,7 @@ public class Serializer {
 	    * the fuel being stored as a Set
 	    */
 	   StringBuilder sb = new StringBuilder();
-	   sb.append(world.getWidth() + " " + world.getHeight() + "\n\n"); // header and blank line
+	   sb.append(world.getWidth() + " " + world.getHeight() + " " + world.getPixelSize() + "\n\n"); // header and blank line
 	   Set<Point> fuel = world.getFuelSet();
 	   synchronized(fuel) {
    	   for(Point el : fuel) { // foreach loop for fuel coordinates
@@ -142,7 +148,8 @@ public class Serializer {
 	      // read the header
 	      int width = scanner.nextInt();
 	      int height = scanner.nextInt();
-	      World world = new World(width, height);
+	      int pixelSize = scanner.nextInt();
+	      World world = new World(width, height, pixelSize);
 	      // read the fuel coordinates
    	   while(scanner.hasNextLine()) {
    	      int x = scanner.nextInt();

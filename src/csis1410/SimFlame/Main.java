@@ -3,6 +3,7 @@ package csis1410.SimFlame;
 /**
  * The class containing the main method
  *
+ * @author Tim Hansen
  */
 public class Main {
    

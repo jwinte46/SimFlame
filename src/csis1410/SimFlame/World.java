@@ -15,6 +15,7 @@ public class World {
    // Fields
    private int width;
    private int height;
+   private int pixelSize = 1;
    private double[] heatMap; // contains the heat values for the world
    private HashSet<Point> fuel; /* a set of coordinates which contain fuel
                                    NOTE: This used to be an ArrayList.
@@ -61,7 +62,31 @@ public class World {
       }
    }
    
+   /**
+    * Constructor that allows the user to specify a pixel size
+    * 
+    * @param width the width
+    * @param height the height
+    * @param pixelSize the pixel size
+    * @throws IllegalArgumentException if pixelSize is less than 1
+    */
+   public World(int width, int height, int pixelSize) {
+      this(width, height); // call the other constructor
+      if(pixelSize > 0)
+         this.pixelSize = pixelSize;
+      else throw new IllegalArgumentException();
+   }
+   
    // Methods
+   
+   /**
+    * Gets the pixel size
+    * 
+    * @return the pixel size
+    */
+   public int getPixelSize() {
+      return pixelSize;
+   }
    
    /**
     * Takes an index into the heatMap and returns the 

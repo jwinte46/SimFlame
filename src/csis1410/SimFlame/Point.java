@@ -2,6 +2,8 @@ package csis1410.SimFlame;
 
 /**
  * Represents coordinates in 2D space
+ * 
+ * @author Tim Hansen
  */
 public class Point {
    
