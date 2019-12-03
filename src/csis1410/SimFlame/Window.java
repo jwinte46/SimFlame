@@ -28,10 +28,7 @@ import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JRadioButtonMenuItem;
 
 /**
- * @author jacobwinters
- * @class CSIS 1410
- * @assignment FINAL PROJECT
- * @date 11/20/19
+ * 
  * @description This is our Window class. It contains our panels and buttons for our GUI
  * The main window of the program.
  * Contains buttons and sliders for controlling the simulation.
@@ -42,6 +39,7 @@ import javax.swing.JRadioButtonMenuItem;
 public class Window extends JFrame {
    
    // Fields
+	
 	private Simulation simulation;
    private JFrame referenceToThisWindow; // for passing to subwindows
    private static int numWindows = 0; // the number of instances of this class in existence 
@@ -52,7 +50,7 @@ public class Window extends JFrame {
    /**
     * Constructor for Window
     * 
-    * @param simulation reference to the simulation
+    * @param simulation, reference to the simulation
     */
    public Window(Simulation simulation) {
       numWindows++;
@@ -93,7 +91,6 @@ public class Window extends JFrame {
       btnStartSimulation.addActionListener(new ActionListener() {
       	public void actionPerformed(ActionEvent e) {
       		simulation.start();
-      		//btnClear.setEnabled(false);
       	}
       });
       controlPanel.add(btnStartSimulation);
@@ -103,7 +100,6 @@ public class Window extends JFrame {
       btnStopSimulation.addActionListener(new ActionListener() {
       	public void actionPerformed(ActionEvent e) {
       		simulation.stop();
-      		//btnClear.setEnabled(true);
       	}
       });
       controlPanel.add(btnStopSimulation);

@@ -6,12 +6,11 @@ package csis1410.SimFlame;
  * @author Tim Hansen
  */
 public interface Callback {
-   
-   // Methods
-   
-   /**
-    * Method to be called when the callback's condition has been satisfied.
-    */
-   public void fire();
-   
+
+	// Methods
+
+	/**
+	 * Method to be called when the callback's condition has been satisfied.
+	 */
+	public void fire();
 }

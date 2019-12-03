@@ -4,12 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Scanner;
 import java.util.Set;
 
@@ -17,19 +12,19 @@ import javax.swing.JOptionPane;
 
 
 /**
- * Contains methods for saving/loading the state of the world to/from disk
+ * Contains methods for saving/loading the state of the world to/from the disk
  * 
  * @authors Adrianna Jones and Tim Hansen
  */
 public class Serializer {
-   
+
 	// Methods
 
 	/**
 	 * Saves the current state of the world to a file.
 	 * 
-	 * @param world the world to save
-	 * @param filename the path of the file to save it to
+	 * @param world, the world to save
+	 * @param filename, the path of the file to save it to
 	 */
 	public static void save(World world, String filename) {
 		try (PrintWriter writer = new PrintWriter(new FileOutputStream(new File(filename)))) {
@@ -43,32 +38,20 @@ public class Serializer {
 	/**
 	 * Loads a previously saved World from a file.
 	 * 
-	 * @param filename the path of the file to attempt loading
+	 * @param filename, the path of the file to attempt loading
 	 * @return the world that was loaded
 	 * @return null if filename is not a valid path to an existing file
 	 * @return null if filename is valid but deserialization fails
 	 */
 	public static World load(String filename) {
-		/*try (Scanner reader = new Scanner(new FileInputStream(new File(filename)))) {
-			ArrayList<Point> fuelList = world.getFuelList();
-				fuelList.add(new File(filename)); // you can't add a file to an ArrayList of points
-				                                  // also, improper indentation
-			for(Point el : fuelList) {
-				writer.println(el); // writer is undeclared here. why would you be using it anyway?
-				heatMap[] = heatMap.nextInt(); // heatmap is undeclared here. arrays don't have a nextInt() method
-			}
+		try(Scanner scanner = new Scanner(new FileInputStream(new File(filename)))) {
+			World world = deserialize(scanner);
+			return world;
+		} catch(Exception e) {
+			System.err.print(e.getMessage());
+			JOptionPane.showMessageDialog(null, "Invalid Path");
+			return null;
 		}
-		catch (FileNotFoundException e) {
-			System.out.println("File cannot be found.");
-		}*/
-	   try(Scanner scanner = new Scanner(new FileInputStream(new File(filename)))) {
-	      World world = deserialize(scanner);
-	      return world;
-	   } catch(Exception e) {
-	      System.err.print(e.getMessage());
-	      JOptionPane.showMessageDialog(null, "Invalid Path");
-	      return null;
-	   }
 	}
 
 	/**
@@ -78,46 +61,34 @@ public class Serializer {
 	 * @return the serialized version as a String
 	 */
 	public static String serialize(World world) {
-	   /* This version is wrong. The documentation specifies that it should take a world
-	    * and return a String. It doesn't say this method should output to a file
-	    */
-		/*try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(filename))) { // where is the filename argument coming from?
-			out.writeObject(); // writeObject is supposed to take a parameter
-		} catch (FileNotFoundException e) {
-			System.out.println("File not found.");
-		} catch (IOException e) {
-			System.out.println("IO Exception occurred");
-		}*/
-	   
-	   /* We only want to serialize the fuel, not the heat.
-	    * Let's not use the standard object serialization Java provides for us.
-	    * Instead, let's just write the coordinates manually.
-	    * 
-	    * The first line of the file will contain the width, height and pixel size
-	    * The second line will be blank
-	    * The third line and onward will contain the coordinates of fuel
-	    * 
-	    * For example, a 300*200 world with a pixel size of 1 containing fuel at points (0,0), (10, 12), and (231, 168):
-	    * 
-	    * 300 200 1
-	    * 
-	    * 0 0
-	    * 10 12
-	    * 231 168
-	    * 
-	    * Note that the order of the coordinates doesn't matter and is nondeterministic due to
-	    * the fuel being stored as a Set
-	    */
-	   StringBuilder sb = new StringBuilder();
-	   sb.append(world.getWidth() + " " + world.getHeight() + " " + world.getPixelSize() + "\n\n"); // header and blank line
-	   Set<Point> fuel = world.getFuelSet();
-	   synchronized(fuel) {
-   	   for(Point el : fuel) { // foreach loop for fuel coordinates
-   	      sb.append(el.getX() + " " + el.getY() + "\n");
-   	   }
-	   }
-	   sb.deleteCharAt(sb.length() - 1); // remove the last newline
-	   return sb.toString();
+
+
+		/*
+		 * The first line of the file will contain the width, height and pixel size
+		 * The second line will be blank
+		 * The third line and onward will contain the coordinates of fuel
+		 * 
+		 * For example, a 300*200 world with a pixel size of 1 containing fuel at points (0,0), (10, 12), and (231, 168):
+		 * 
+		 * 300 200 1
+		 * 
+		 * 0 0
+		 * 10 12
+		 * 231 168
+		 * 
+		 * Note that the order of the coordinates doesn't matter and is nondeterministic due to
+		 * the fuel being stored as a Set
+		 */
+		StringBuilder sb = new StringBuilder();
+		sb.append(world.getWidth() + " " + world.getHeight() + " " + world.getPixelSize() + "\n\n"); // header and blank line
+		Set<Point> fuel = world.getFuelSet();
+		synchronized(fuel) {
+			for(Point el : fuel) { // foreach loop for fuel coordinates
+				sb.append(el.getX() + " " + el.getY() + "\n");
+			}
+		}
+		sb.deleteCharAt(sb.length() - 1); // remove the last newline
+		return sb.toString();
 	}
 
 	/**
@@ -131,38 +102,26 @@ public class Serializer {
 	 * @return null if deserialization fails
 	 */
 	public static World deserialize(Scanner scanner) {
-	   // This version is wrong. It's not supposed to read a file in.
-		/*try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(filename))) { // where is filename coming from?
-			return() in.readObject(); // readObject should take an argument, return shouldn't have parentheses
-		} catch (FileNotFoundException e) {
-			System.out.println("File not found.");
-		} catch (IOException e) {
-			System.out.println("IO Exception occurred");
-		} catch (ClassNotFoundException e) {
-			System.out.println("Class not found.");
-		}
-		return null;*/
 
-	   //Scanner scanner = new Scanner(string); // use scanner to read the string
-	   try {
-	      // read the header
-	      int width = scanner.nextInt();
-	      int height = scanner.nextInt();
-	      int pixelSize = scanner.nextInt();
-	      World world = new World(width, height, pixelSize);
-	      // read the fuel coordinates
-   	   while(scanner.hasNextLine()) {
-   	      int x = scanner.nextInt();
-   	      int y = scanner.nextInt();
-   	      world.addFuelAt(new Point(x, y));
-   	   }
-   	   scanner.close();
-   	   return world;
-	   } catch(Exception e) {
-	      System.err.println(e.getMessage());
-	      scanner.close();
-         return null;
-	   }
+		try {
+			// read the header
+			int width = scanner.nextInt();
+			int height = scanner.nextInt();
+			int pixelSize = scanner.nextInt();
+			World world = new World(width, height, pixelSize);
+			// read the fuel coordinates
+			while(scanner.hasNextLine()) {
+				int x = scanner.nextInt();
+				int y = scanner.nextInt();
+				world.addFuelAt(new Point(x, y));
+			}
+			scanner.close();
+			return world;
+		} catch(Exception e) {
+			System.err.println(e.getMessage());
+			scanner.close();
+			return null;
+		}
 	}
-	
+
 }
